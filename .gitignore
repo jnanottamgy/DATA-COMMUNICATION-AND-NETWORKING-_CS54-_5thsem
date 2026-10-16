@@ -1,0 +1,4 @@
+# Scratch files live at the repo root; committed course material goes in a
+# unit or exam folder (e.g. CIE-1/). Keeps one-off working files out of git.
+/*.pdf
+/*.html
