@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DCN Ground Zero</title>
+<style>
+@page { size: A4; margin: 13mm 12mm 14mm 12mm; }
+:root{
+  --ink:#131A24; --body:#2A3340; --muted:#6B7685; --line:#D9DFE7; --soft:#F4F6F9;
+  --u1:#1D4ED8; --u1bg:#EAF0FE; --u1line:#BFD2FB;
+  --u2:#6D28D9; --u2bg:#F2ECFE; --u2line:#D6C6FB;
+  --u3:#0E7490; --u3bg:#E4F3F7; --u3line:#B6DEE9;
+  --hot:#C2410C; --hotbg:#FFF1E6;
+  --hook:#92400E; --hookbg:#FEF6DF; --hookline:#F2DFA8;
+  --trap:#BE123C; --trapbg:#FFEDF1; --trapline:#FAC7D4;
+  --num:#0F766E; --numbg:#E6F4F1;
+}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+body{margin:0;font-family:"Inter","Liberation Sans",Arial,sans-serif;font-size:8.9pt;line-height:1.42;color:var(--body);}
+h1,h2,h3,h4{font-family:"Inter Display","Inter",sans-serif;color:var(--ink);margin:0;line-height:1.2;}
+p{margin:0 0 4px}
+ul,ol{margin:0 0 5px;padding-left:16px}
+li{margin:0 0 2px}
+b,strong{color:var(--ink);font-weight:700}
+code,.mono{font-family:"DejaVu Sans Mono",monospace;font-size:8.2pt}
+sup{font-size:.68em}
+.small{font-size:8pt}
+.mut{color:var(--muted)}
+
+/* ---------- COVER ---------- */
+.cover{height:263mm;display:flex;flex-direction:column;}
+.cvr-top{border-top:5px solid var(--ink);padding-top:9px}
+.cvr-kick{font-size:8.4pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.cvr-h{font-family:"Inter Display";font-size:40pt;font-weight:800;letter-spacing:-.025em;line-height:.98;margin:7px 0 6px;color:var(--ink)}
+.cvr-sub{font-size:12pt;color:var(--u1);font-weight:600;margin-bottom:14px}
+.cvr-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.cvr-card{border:1.2px solid var(--line);border-radius:7px;padding:10px 12px}
+.cvr-card h4{font-size:8.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.stat{display:flex;gap:12px;margin:14px 0 2px}
+.stat div{flex:1;border:1.2px solid var(--line);border-radius:7px;padding:9px 10px;text-align:center}
+.stat b{display:block;font-family:"Inter Display";font-size:20pt;font-weight:800;color:var(--u1);line-height:1}
+.stat span{font-size:7.6pt;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.scope{border:1.6px solid var(--ink);border-radius:8px;padding:12px 14px;margin-top:13px;background:var(--soft)}
+.scope h4{font-size:10pt;margin-bottom:7px}
+.scope .in{color:#166534;font-weight:700}
+.scope .out{color:var(--trap);font-weight:700}
+.toc{margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.toc h5{font-family:"Inter Display";font-size:8.6pt;margin:0 0 5px;padding-bottom:3px;border-bottom:2px solid}
+.toc ol{margin:0;padding-left:17px;font-size:7.9pt;line-height:1.34}
+.toc li{margin:0 0 2.5px}
+.toc .u1c{color:var(--u1);border-color:var(--u1)}
+.toc .u2c{color:var(--u2);border-color:var(--u2)}
+.toc .u3c{color:var(--u3);border-color:var(--u3)}
+.cvr-foot{margin-top:auto;border-top:1.2px solid var(--line);padding-top:8px;font-size:8pt;color:var(--muted)}
+
+/* ---------- SECTIONS ---------- */
+.sheet{break-before:page}
+.secbar{display:flex;align-items:baseline;gap:10px;border-bottom:3px solid var(--ink);padding-bottom:5px;margin-bottom:11px}
+.secbar h2{font-size:17pt;font-weight:800;letter-spacing:-.02em}
+.secbar .sn{font-family:"Inter Display";font-size:9pt;font-weight:800;color:#fff;background:var(--ink);padding:2.5px 8px;border-radius:4px;letter-spacing:.06em}
+.secbar .meta{margin-left:auto;font-size:8.2pt;color:var(--muted);font-weight:600}
+.u1 .secbar{border-color:var(--u1)} .u1 .secbar .sn{background:var(--u1)} .u1 .secbar h2{color:var(--u1)}
+.u2 .secbar{border-color:var(--u2)} .u2 .secbar .sn{background:var(--u2)} .u2 .secbar h2{color:var(--u2)}
+.u3 .secbar{border-color:var(--u3)} .u3 .secbar .sn{background:var(--u3)} .u3 .secbar h2{color:var(--u3)}
+
+/* ---------- QUESTION CARD ---------- */
+.q{border:1.2px solid var(--line);border-radius:8px;margin-bottom:9px;break-inside:avoid;overflow:hidden}
+.q.big{break-inside:auto}
+.qh{display:flex;gap:9px;align-items:flex-start;padding:7px 10px;background:var(--soft);border-bottom:1.2px solid var(--line)}
+.qn{font-family:"Inter Display";font-size:12.5pt;font-weight:800;color:#fff;background:var(--ink);min-width:30px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:5px;flex:none;padding:0 5px}
+.u1 .qn{background:var(--u1)} .u2 .qn{background:var(--u2)} .u3 .qn{background:var(--u3)}
+.u1 .qh{background:var(--u1bg);border-color:var(--u1line)} .u1 .q{border-color:var(--u1line)}
+.u2 .qh{background:var(--u2bg);border-color:var(--u2line)} .u2 .q{border-color:var(--u2line)}
+.u3 .qh{background:var(--u3bg);border-color:var(--u3line)} .u3 .q{border-color:var(--u3line)}
+.qt{font-size:11pt;font-weight:800;letter-spacing:-.01em;margin-bottom:3px}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:7pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1.5px 5px;border-radius:3px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+.tag.hot{background:var(--hot);border-color:var(--hot);color:#fff}
+.tag.m{background:var(--ink);border-color:var(--ink);color:#fff}
+.qbody{padding:8px 10px 9px}
+.ask{font-size:8.5pt;font-style:italic;color:var(--ink);background:#fff;border-left:3px solid var(--muted);padding:5px 9px;margin-bottom:8px;border-radius:0 4px 4px 0}
+.u1 .ask{border-color:var(--u1)} .u2 .ask{border-color:var(--u2)} .u3 .ask{border-color:var(--u3)}
+.ask .src{display:block;font-style:normal;font-size:7.4pt;color:var(--muted);font-weight:700;margin-top:3px;letter-spacing:.03em}
+h4.step{font-size:9.1pt;font-weight:800;color:var(--ink);margin:7px 0 3px;padding-bottom:2px;border-bottom:1px dotted var(--line)}
+h4.step:first-child{margin-top:0}
+
+/* ---------- BOXES ---------- */
+.hook,.trap,.numb{border-radius:6px;padding:5px 8px;margin:6px 0 0;font-size:8.3pt;break-inside:avoid}
+.hook{background:var(--hookbg);border:1px solid var(--hookline);color:#5C3A0A}
+.trap{background:var(--trapbg);border:1px solid var(--trapline);color:#8C1232}
+.numb{background:var(--numbg);border:1px solid #BCE0D9;color:#0B5048}
+.hook>b:first-child,.trap>b:first-child,.numb>b:first-child{display:inline-block;font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;margin-right:5px}
+.score{margin-top:6px;background:#fff;border:1px dashed var(--muted);border-radius:6px;padding:5px 8px;font-size:8.1pt;color:var(--body)}
+.score>b:first-child{font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);margin-right:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* ---------- TABLES ---------- */
+table{width:100%;border-collapse:collapse;font-size:8.05pt;margin:4px 0 3px}
+th{background:var(--ink);color:#fff;text-align:left;padding:3px 5.5px;font-weight:700;font-size:7.6pt;letter-spacing:.03em}
+.u1 th{background:var(--u1)} .u2 th{background:var(--u2)} .u3 th{background:var(--u3)}
+td{border-bottom:1px solid var(--line);padding:3px 5.5px;vertical-align:top}
+tbody tr:nth-child(even) td{background:#FAFBFC}
+td.c,th.c{text-align:center}
+.tnum td{font-family:"DejaVu Sans Mono",monospace;font-size:7.8pt}
+
+/* ---------- FIGURES ---------- */
+figure{margin:7px 0 3px;break-inside:avoid;text-align:center}
+figure svg{max-width:100%;height:auto}
+figcaption{font-size:7.5pt;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:.02em}
+.codeblk{background:#1B2330;color:#E6EBF2;border-radius:6px;padding:6px 9px;font-family:"DejaVu Sans Mono",monospace;font-size:7.7pt;line-height:1.4;white-space:pre;overflow:hidden;margin:5px 0;break-inside:avoid}
+.codeblk .k{color:#7DD3FC} .codeblk .g{color:#86EFAC} .codeblk .r{color:#FCA5A5} .codeblk .y{color:#FDE68A} .codeblk .m{color:#9AA7B8}
+.lite{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.lite .k{color:var(--u1)} .lite .g{color:#15803D} .lite .r{color:var(--trap)} .lite .m{color:var(--muted)}
+.kv{display:flex;gap:6px;flex-wrap:wrap;margin:5px 0}
+.kv span{font-size:7.8pt;background:#fff;border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.kv span b{color:var(--ink)}
+.formula{text-align:center;font-family:"DejaVu Sans Mono",monospace;font-size:8.8pt;background:#fff;border:1.4px solid var(--ink);border-radius:5px;padding:5px 8px;margin:5px 0;color:var(--ink);font-weight:700}
+.u1 .formula{border-color:var(--u1)} .u2 .formula{border-color:var(--u2)} .u3 .formula{border-color:var(--u3)}
+
+/* ---------- GROUND ZERO ADDITIONS ---------- */
+.lesson{border:1.2px solid var(--line);border-radius:8px;margin-bottom:9px;break-inside:avoid;overflow:hidden}
+.lesson.flow{break-inside:auto}
+.lh{display:flex;gap:9px;align-items:center;padding:6px 10px;background:var(--soft);border-bottom:1.2px solid var(--line)}
+.lh .ln{font-family:"Inter Display";font-size:8pt;font-weight:800;color:#fff;background:var(--ink);padding:2px 7px;border-radius:4px;letter-spacing:.04em;flex:none}
+.lh h3{font-size:11pt;font-weight:800;letter-spacing:-.01em}
+.lb{padding:8px 10px 9px}
+.analogy{background:#F0F7F2;border:1px solid #BFE0CB;border-radius:6px;padding:5px 8px;margin:6px 0 0;font-size:8.3pt;color:#14502F}
+.analogy>b:first-child{display:inline-block;font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;margin-right:5px}
+.unlock{background:#fff;border:1px solid var(--line);border-left:3px solid var(--ink);border-radius:0 5px 5px 0;padding:4px 8px;margin:6px 0 0;font-size:7.9pt;color:var(--muted)}
+.unlock b{color:var(--ink);font-size:7.2pt;letter-spacing:.08em;text-transform:uppercase;margin-right:5px}
+.g1{border-left-color:var(--u1)!important} .g2{border-left-color:var(--u2)!important} .g3{border-left-color:var(--u3)!important}
+.pow{font-family:"DejaVu Sans Mono",monospace;font-size:7.7pt}
+.pow td{padding:2px 4px;text-align:center}
+.pow th{padding:2.5px 4px;text-align:center;font-size:7.2pt}
+.gloss td{padding:2px 4.5px;font-size:7.5pt;line-height:1.3}
+.gloss td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+.bigq{font-family:"Inter Display";font-size:10pt;font-weight:800;color:var(--ink);margin:0 0 4px}
+.cols2{column-count:2;column-gap:12px}
+.cols2 table{break-inside:avoid}
+.lesson.newpage{break-before:page}
+</style>
+</head>
+<body>
+<!-- ================= COVER ================= -->
+<section class="cover">
+  <div class="cvr-top">
+    <div class="cvr-kick">CS54 &middot; Data Communication &amp; Networking &middot; Companion to the CIE-1 Strike Sheet</div>
+    <div class="cvr-h">GROUND<br>ZERO</div>
+    <div class="cvr-sub">Every idea the Strike Sheet assumes you already have &mdash; built from nothing, in the order you need it</div>
+  </div>
+
+  <div class="scope" style="margin-top:10px">
+    <h4>Read this first if any of these sentences felt like a foreign language</h4>
+    <div class="three" style="margin-top:6px">
+      <p class="small" style="margin:0">&ldquo;The transport layer <b>encapsulates</b> the message in a <b>segment</b> and passes it to the network layer.&rdquo;</p>
+      <p class="small" style="margin:0">&ldquo;<b>first = address AND mask</b>, so the last octet 89 AND 192 gives 64.&rdquo;</p>
+      <p class="small" style="margin:0">&ldquo;A TCP <b>socket</b> is identified by the <b>4-tuple</b> and the sender's <b>cwnd</b> is halved on 3 duplicate <b>ACKs</b>.&rdquo;</p>
+    </div>
+    <p style="margin:8px 0 0"><b>Nothing here is extra syllabus.</b> Every page is the underlying idea behind a card in the Strike Sheet, and each lesson ends with a <b>&ldquo;this unlocks&rdquo;</b> line pointing at the exact questions it lets you answer.</p>
+  </div>
+
+  <div class="toc">
+    <div><h5 class="u1c">PART A &middot; The mental model</h5>
+      <ol>
+        <li>What a network actually is</li>
+        <li>The journey of one message</li>
+        <li>Why layers exist &mdash; and what a protocol is</li>
+        <li>Encapsulation, and the five object names</li>
+        <li>The four addresses &mdash; MAC, IP, port, hostname</li>
+      </ol>
+    </div>
+    <div><h5 class="u3c">PART B &middot; The maths you cannot skip</h5>
+      <ol start="6">
+        <li>Bits, bytes, octets and powers of 2</li>
+        <li>Decimal &harr; binary &harr; hexadecimal</li>
+        <li>log<sub>2</sub> without a calculator</li>
+        <li>Bitwise AND, OR and NOT</li>
+        <li>Why usable hosts = N &minus; 2</li>
+      </ol>
+    </div>
+    <div><h5 class="u2c">PART C &middot; How the conversation works</h5>
+      <ol start="11">
+        <li>Processes, clients, servers and sockets</li>
+        <li>Bits vs bytes, Mbps, and the four delays</li>
+        <li>RTT &mdash; the unit everything is priced in</li>
+        <li>TCP vs UDP &mdash; the fundamental split</li>
+        <li>Sequence numbers, ACKs, timers, windows</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="cvr-grid" style="margin-top:12px">
+    <div class="cvr-card">
+      <h4>How to use it</h4>
+      <p style="margin:0">Read <b>Part A</b> and <b>Part C</b> once, straight through &mdash; about 35 minutes. <b>Part B</b> is reference: work the three conversions on paper, then come back to it whenever a Unit 3 numerical stalls. The last two pages are a <b>glossary</b> and an <b>acronym decoder</b> &mdash; use them while reading the Strike Sheet, not before.</p>
+    </div>
+    <div class="cvr-card">
+      <h4>The honest shortcut</h4>
+      <p style="margin:0">If you have under an hour: read <b>Lesson 4</b> (encapsulation), <b>Lesson 5</b> (the four addresses), <b>Lesson 9</b> (bitwise AND/OR) and <b>Lesson 15</b> (sequence numbers and ACKs). Those four carry about 80&nbsp;% of the vocabulary in the Strike Sheet.</p>
+    </div>
+  </div>
+
+  <div class="cvr-foot">Companion to <b>DCN_CIE1_Strike_Sheet.pdf</b> &middot; Units 1, 2 and 3 up to IPv4 addressing &middot; Same colour code: <span style="color:var(--u1);font-weight:700">blue Unit 1</span>, <span style="color:var(--u2);font-weight:700">violet Unit 2</span>, <span style="color:var(--u3);font-weight:700">teal Unit 3</span>, <span style="color:var(--hook);font-weight:700">amber memory hook</span>, <span style="color:var(--trap);font-weight:700">pink trap</span>, <span style="color:#14502F;font-weight:700">green analogy</span>.</div>
+</section>
+
+<!-- ================= PART A ================= -->
+<section class="sheet u1">
+  <div class="secbar"><span class="sn">PART A</span><h2>The mental model</h2><span class="meta">Lessons 1 &ndash; 5 &middot; read straight through</span></div>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">01</span><h3>What a network actually is</h3></div>
+  <div class="lb">
+    <p class="bigq">A network is just devices joined by links so they can exchange data. That's all.</p>
+    <p>Formally: <b>a network is the interconnection of a set of devices capable of communication.</b> Everything in this course is a detail of <i>how</i> that exchange is organised.</p>
+    <div class="two">
+      <div>
+        <h4 class="step">Two kinds of device &mdash; this distinction matters all term</h4>
+        <table>
+          <tr><th>Type</th><th>What it is</th><th>Examples</th></tr>
+          <tr><td><b>Host</b><br><span class="mut">(end system)</span></td><td>A device that <b>produces or consumes</b> the data. The message starts or ends here.</td><td>Laptop, desktop, phone, server, security system</td></tr>
+          <tr><td><b>Connecting device</b></td><td>A device that only <b>moves data along</b>. It never creates the message.</td><td><b>Router</b> (joins networks), <b>switch</b> (joins devices), <b>modem</b> (changes the form of data), hub, repeater</td></tr>
+        </table>
+        <p class="small">A <b>node</b> is any device that can send and/or receive data &mdash; it covers both kinds.</p>
+        <p class="small"><b>Why you care:</b> the exam repeatedly asks <i>"how many layers is each device involved in?"</i> The answer depends entirely on this split &mdash; a host runs all 5 layers, a router only 3, a switch only 2. A connecting device doesn't need the top layers because it never reads the message, only the envelope.</p>
+      </div>
+      <div>
+        <h4 class="step">The four connecting devices, by layer</h4>
+        <table>
+          <tr><th>Device</th><th>Layer</th><th>What it does</th></tr>
+          <tr><td><b>Repeater</b></td><td>1 Physical</td><td>Amplifies / regenerates a weak signal to extend range. Understands <b>nothing</b> &mdash; just boosts.</td></tr>
+          <tr><td><b>Hub</b></td><td>1 Physical</td><td>Connects devices and <b>broadcasts to all ports</b>, no filtering. Dumb.</td></tr>
+          <tr><td><b>Switch</b></td><td>2 Data link</td><td>Forwards only to the correct device using the <b>MAC address</b>.</td></tr>
+          <tr><td><b>Router</b></td><td>3 Network</td><td>Routes between <b>different networks</b> (LAN &harr; Internet) using the <b>IP address</b>.</td></tr>
+        </table>
+        <div class="analogy"><b>Analogy</b>A <b>hub</b> shouts your message into a crowded room and hopes the right person hears. A <b>switch</b> walks it to the right desk in the office. A <b>router</b> takes it to a different building.</div>
+        <div class="hook"><b>Hook</b>The higher the layer, the smarter the device. <b>Repeater 1, Hub 1, Switch 2, Router 3.</b></div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q8 (host 5 / router 3 / switch 2) and Q10 (topologies, hub failure).</div>
+  </div>
+</article>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">02</span><h3>The journey of one message &mdash; the picture to hold in your head</h3></div>
+  <div class="lb">
+    <p>Everything in Units 1, 2 and 3 is one slice of this single journey. When a question confuses you, locate it on this line first.</p>
+    <figure>
+<svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.6">
+<defs><marker id="j1" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 z" fill="#1D4ED8"/></marker></defs>
+<rect x="6" y="52" width="74" height="40" rx="5" fill="#EAF0FE" stroke="#1D4ED8" stroke-width="1.3"/>
+<text x="43" y="68" text-anchor="middle" font-weight="700" font-size="8">Your phone</text><text x="43" y="80" text-anchor="middle" font-size="7">(a HOST)</text>
+<rect x="124" y="52" width="74" height="40" rx="5" fill="#fff" stroke="#6B7685"/>
+<text x="161" y="68" text-anchor="middle" font-weight="700" font-size="8">Home router</text><text x="161" y="80" text-anchor="middle" font-size="7">+ Wi-Fi</text>
+<rect x="242" y="52" width="74" height="40" rx="5" fill="#fff" stroke="#6B7685"/>
+<text x="279" y="68" text-anchor="middle" font-weight="700" font-size="8">Your ISP</text><text x="279" y="80" text-anchor="middle" font-size="7">(Jio / Airtel)</text>
+<rect x="360" y="52" width="94" height="40" rx="5" fill="#FEF6DF" stroke="#92400E"/>
+<text x="407" y="66" text-anchor="middle" font-weight="700" font-size="8">The Internet</text><text x="407" y="77" text-anchor="middle" font-size="6.8">backbones + routers</text><text x="407" y="87" text-anchor="middle" font-size="6.8">(many hops)</text>
+<rect x="498" y="52" width="74" height="40" rx="5" fill="#fff" stroke="#6B7685"/>
+<text x="535" y="68" text-anchor="middle" font-weight="700" font-size="8">Their ISP</text>
+<rect x="616" y="52" width="78" height="40" rx="5" fill="#EAF0FE" stroke="#1D4ED8" stroke-width="1.3"/>
+<text x="655" y="68" text-anchor="middle" font-weight="700" font-size="8">Web server</text><text x="655" y="80" text-anchor="middle" font-size="7">(a HOST)</text>
+<g stroke="#1D4ED8" stroke-width="1.4" marker-end="url(#j1)">
+<line x1="82" y1="72" x2="122" y2="72"/><line x1="200" y1="72" x2="240" y2="72"/><line x1="318" y1="72" x2="358" y2="72"/><line x1="456" y1="72" x2="496" y2="72"/><line x1="574" y1="72" x2="614" y2="72"/></g>
+<rect x="6" y="14" width="192" height="26" rx="4" fill="#EAF0FE" stroke="#BFD2FB"/>
+<text x="102" y="25" text-anchor="middle" font-size="7.4" font-weight="700" fill="#1D4ED8">LAN &mdash; your building</text>
+<text x="102" y="35" text-anchor="middle" font-size="6.8">privately owned, joins HOSTS</text>
+<rect x="242" y="14" width="330" height="26" rx="4" fill="#FEF6DF" stroke="#F2DFA8"/>
+<text x="407" y="25" text-anchor="middle" font-size="7.4" font-weight="700" fill="#92400E">WAN &mdash; town, country, world</text>
+<text x="407" y="35" text-anchor="middle" font-size="6.8">run by communication companies, joins CONNECTING DEVICES</text>
+<text x="6" y="112" font-size="8" font-weight="700" fill="#131A24">Where each unit lives on this line:</text>
+<rect x="6" y="118" width="688" height="18" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/>
+<text x="350" y="130" text-anchor="middle" font-size="7.6" fill="#1D4ED8"><tspan font-weight="700">UNIT 1</tspan> &mdash; what the two HOSTS at the ends say to each other (HTTP, DNS, SMTP) + how the whole stack is organised</text>
+<rect x="6" y="138" width="688" height="18" rx="3" fill="#F2ECFE" stroke="#6D28D9"/>
+<text x="350" y="150" text-anchor="middle" font-size="7.6" fill="#6D28D9"><tspan font-weight="700">UNIT 2</tspan> &mdash; making that end-to-end conversation reliable and correctly paced (TCP / UDP)</text>
+<rect x="6" y="158" width="688" height="18" rx="3" fill="#E4F3F7" stroke="#0E7490"/>
+<text x="350" y="170" text-anchor="middle" font-size="7.6" fill="#0E7490"><tspan font-weight="700">UNIT 3</tspan> &mdash; giving every device an address and getting the packet across all those middle hops</text>
+</svg>
+    </figure>
+    <div class="two">
+      <div>
+        <h4 class="step">The words on that picture</h4>
+        <table>
+          <tr><th>Term</th><th>Meaning</th></tr>
+          <tr><td><b>LAN</b></td><td>Local Area Network. <b>Privately owned</b>, one office / building / campus. <b>Joins hosts.</b></td></tr>
+          <tr><td><b>WAN</b></td><td>Wide Area Network. Town, state, country, world. Run by communication companies and <b>leased</b>. <b>Joins connecting devices.</b></td></tr>
+          <tr><td><b>internet</b><br><span class="mut">small i</span></td><td><b>Any</b> two or more networks joined together.</td></tr>
+          <tr><td><b>Internet</b><br><span class="mut">capital I</span></td><td>The one global internet, made of thousands of networks. Three levels: <b>backbones &rarr; provider networks &rarr; customer networks</b>.</td></tr>
+          <tr><td><b>ISP</b></td><td>Internet Service Provider. Backbones are <b>international</b> ISPs; provider networks are <b>national/regional</b> ISPs.</td></tr>
+          <tr><td><b>Peering point</b></td><td>The switching system where two backbones connect to each other.</td></tr>
+          <tr><td><b>Hop</b></td><td>One step of the journey. <b>A hop is a host or a router.</b></td></tr>
+        </table>
+      </div>
+      <div>
+        <h4 class="step">The one sentence that makes layering click</h4>
+        <p class="small">Look at the picture again. The <b>message</b> ("GET me this web page") only matters at the <b>two ends</b>. Every box in the middle doesn't care what the message says &mdash; it only needs to know <b>where to send it next</b>.</p>
+        <p class="small">That is <i>exactly</i> why the stack is split into layers. The top layers are the <b>conversation</b>; the bottom layers are the <b>delivery</b>. Middle boxes implement only the delivery layers, so they stay cheap and fast.</p>
+        <div class="analogy"><b>Analogy</b>You post a letter. The <b>letter</b> is for your friend. The <b>postal workers</b> never open it &mdash; they only read the envelope, and each one only needs to know the <i>next</i> sorting office, not the whole route. The letter is the application layer; the envelope is everything below.</div>
+        <div class="hook"><b>Hook</b><b>Ends talk, middles forward.</b> Application / transport / network are <b>end-to-end</b>. Data link / physical are <b>hop-to-hop</b>.</div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q8 (end-to-end vs hop-to-hop), Q10 and the whole Unit&nbsp;1 Section&nbsp;A vocabulary.</div>
+  </div>
+</article>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">03</span><h3>What a protocol is, and why anyone bothered with layers</h3></div>
+  <div class="lb">
+    <p class="bigq">A protocol is a set of rules that the sender, the receiver and every device in between agree to follow.</p>
+    <p>Not code, not hardware &mdash; an <b>agreement</b>. "Port 80 means web traffic." "A line containing only a full stop ends an email." "Reply <code>200 OK</code> if you found the file." Both sides must already know the rules, or the bytes are meaningless.</p>
+
+    <div class="two">
+      <div>
+        <h4 class="step">The textbook story &mdash; Maria and Ann (worth knowing, it's examinable)</h4>
+        <p class="small"><b>Scenario 1 &mdash; face to face.</b> Two neighbours talk in the same language. Communication happens in <b>one layer</b>. Their protocol has 5 rules: greet on meeting; keep vocabulary to the level of the friendship; don't speak while the other speaks; it's a dialog not a monolog; exchange nice words on leaving.</p>
+        <p class="small"><b>Scenario 2 &mdash; by post, encrypted.</b> Ann moves away. They now write letters, and encrypt them so an intercepted letter can't be read. Communication now happens in <b>three layers</b>, each with its own machine:</p>
+        <table>
+          <tr><th>Layer</th><th>Maria (sender)</th><th>Ann (receiver)</th></tr>
+          <tr><td><b>3</b></td><td>Talks to the machine as if it were Ann (plaintext)</td><td>Machine speaks the plaintext to Ann</td></tr>
+          <tr><td><b>2</b></td><td>Encrypts plaintext &rarr; ciphertext</td><td>Decrypts ciphertext &rarr; plaintext</td></tr>
+          <tr><td><b>1</b></td><td>Puts ciphertext in an envelope, adds the addresses, mails it</td><td>Takes the letter out of the mailbox and the envelope</td></tr>
+        </table>
+        <p class="small"><b>Modularity</b> is the point. If a better encryption comes along they replace <b>only the layer-2 machine</b>. A layer is a <b>black box</b> &mdash; you care about its inputs and outputs, never how it works inside. Two machines giving the same output for the same input can replace each other, even from different manufacturers.</p>
+      </div>
+      <div>
+        <h4 class="step">The two principles of protocol layering</h4>
+        <ol class="small">
+          <li>For <b>bidirectional</b> communication, each layer must perform <b>two opposite tasks</b>, one in each direction (encrypt / decrypt, send / receive).</li>
+          <li>The two objects <b>under each layer at both sites must be identical</b> (the ciphertext under layer 2 is the same on both sides).</li>
+        </ol>
+        <h4 class="step">Advantages and the one disadvantage</h4>
+        <p class="small"><b>Advantages:</b> it <b>separates the service from the implementation</b>; and <b>intermediate devices don't need all the layers</b> &mdash; without layering they would be as complex as end systems, making everything expensive.</p>
+        <p class="small"><b>Disadvantage:</b> some argue a <b>single layer</b> would make the job simpler.</p>
+        <h4 class="step">Logical connection &mdash; a phrase you must be able to define</h4>
+        <p class="small">Layer-to-layer communication is <b>logical</b>, meaning <b>imaginary</b>. Maria's layer-2 machine behaves <i>as if</i> it hands the ciphertext straight to Ann's layer-2 machine. In reality the data goes all the way down, across, and all the way up.</p>
+        <div class="trap"><b>Trap</b><b>Only the physical layer really moves anything.</b> Every other "connection" is a convenient fiction. When a question says <i>"explain the logical connections"</i>, that sentence is worth a mark on its own.</div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q8 (logical connections) and the protocol-layering theory in Unit 1 Section A.</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">04</span><h3>Encapsulation &mdash; and why the same data has five different names</h3></div>
+  <div class="lb">
+    <p class="bigq">Going down the stack, each layer wraps what it was given in its own header. Going up, each layer strips its own header off.</p>
+    <p>That's it. <b>Encapsulation</b> = adding headers on the way down. <b>Decapsulation</b> = removing them on the way up. The data doesn't change &mdash; it just collects and sheds envelopes. <b>The five "object" names in the syllabus are simply the same data at five stages of wrapping.</b></p>
+
+    <figure>
+<svg viewBox="0 0 700 215" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.6">
+<text x="6" y="11" font-size="8.4" font-weight="700" fill="#131A24">SENDER &mdash; going down, each layer adds its header</text>
+<g>
+<rect x="6" y="18" width="330" height="22" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/>
+<text x="171" y="32" text-anchor="middle" font-weight="700" font-size="8">DATA ("GET /index.html")</text>
+<text x="344" y="33" font-size="7.6" font-weight="700" fill="#1D4ED8">&#8592; Application layer &rarr; this is a MESSAGE</text>
+
+<rect x="6" y="44" width="56" height="22" rx="3" fill="#6D28D9"/><text x="34" y="58" text-anchor="middle" fill="#fff" font-weight="700" font-size="7.4">TCP hdr</text>
+<rect x="62" y="44" width="330" height="22" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/><text x="227" y="58" text-anchor="middle" font-size="7.6">DATA</text>
+<text x="400" y="59" font-size="7.6" font-weight="700" fill="#6D28D9">&#8592; Transport layer &rarr; now a SEGMENT (ports added)</text>
+
+<rect x="6" y="70" width="56" height="22" rx="3" fill="#0E7490"/><text x="34" y="84" text-anchor="middle" fill="#fff" font-weight="700" font-size="7.4">IP hdr</text>
+<rect x="62" y="70" width="56" height="22" rx="3" fill="#6D28D9"/><text x="90" y="84" text-anchor="middle" fill="#fff" font-size="7.2">TCP</text>
+<rect x="118" y="70" width="330" height="22" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/><text x="283" y="84" text-anchor="middle" font-size="7.6">DATA</text>
+<text x="456" y="85" font-size="7.6" font-weight="700" fill="#0E7490">&#8592; Network layer &rarr; now a DATAGRAM (IPs added)</text>
+
+<rect x="6" y="96" width="56" height="22" rx="3" fill="#92400E"/><text x="34" y="110" text-anchor="middle" fill="#fff" font-weight="700" font-size="7.4">Frame hd</text>
+<rect x="62" y="96" width="46" height="22" rx="3" fill="#0E7490"/><text x="85" y="110" text-anchor="middle" fill="#fff" font-size="7.2">IP</text>
+<rect x="108" y="96" width="46" height="22" rx="3" fill="#6D28D9"/><text x="131" y="110" text-anchor="middle" fill="#fff" font-size="7.2">TCP</text>
+<rect x="154" y="96" width="300" height="22" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/><text x="304" y="110" text-anchor="middle" font-size="7.6">DATA</text>
+<rect x="454" y="96" width="42" height="22" rx="3" fill="#92400E"/><text x="475" y="110" text-anchor="middle" fill="#fff" font-size="7.2">trailer</text>
+<text x="504" y="111" font-size="7.6" font-weight="700" fill="#92400E">&#8592; Data link &rarr; a FRAME (MAC + trailer)</text>
+
+<rect x="6" y="122" width="490" height="18" rx="3" fill="#131A24"/>
+<text x="251" y="134" text-anchor="middle" fill="#fff" font-size="7.4" font-weight="700">1 0 1 1 0 0 1 0 1 1 1 0 0 1 0 1 1 0 1 0 0 1 1 1 0 1 0 1 1 0 0 1 0 1 1 1 0 0 1 0 1</text>
+<text x="504" y="135" font-size="7.6" font-weight="700" fill="#131A24">&#8592; Physical layer &rarr; just BITS on the wire</text>
+</g>
+<line x1="6" y1="150" x2="694" y2="150" stroke="#D9DFE7"/>
+<text x="6" y="164" font-size="8.4" font-weight="700" fill="#131A24">RECEIVER &mdash; going up, each layer removes its own header and hands the rest upward</text>
+<text x="6" y="178" font-size="7.8">bits &rarr; data link strips the frame header/trailer &rarr; network strips the IP header &rarr; transport strips the TCP header &rarr; application gets the original message back</text>
+<rect x="6" y="186" width="688" height="22" rx="4" fill="#FEF6DF" stroke="#F2DFA8"/>
+<text x="350" y="200" text-anchor="middle" font-size="8" font-weight="700" fill="#92400E">Principle 2 in action: the object under each layer is IDENTICAL at both ends &mdash; the segment the sender built is the segment the receiver reads.</text>
+</svg>
+    </figure>
+
+    <div class="two">
+      <div>
+        <h4 class="step">The five names &mdash; learn this table cold</h4>
+        <table>
+          <tr><th>Layer</th><th>Object is called</th><th>What its header adds</th></tr>
+          <tr><td>Application</td><td><b>Message</b></td><td>nothing yet &mdash; this is the user's data</td></tr>
+          <tr><td>Transport</td><td><b>Segment</b> (TCP) or <b>user datagram</b> (UDP)</td><td><b>port numbers</b> &rarr; which <i>program</i></td></tr>
+          <tr><td>Network</td><td><b>Datagram</b> / packet</td><td><b>IP addresses</b> &rarr; which <i>computer</i></td></tr>
+          <tr><td>Data link</td><td><b>Frame</b></td><td><b>MAC addresses</b> &rarr; which <i>next device</i> + error check</td></tr>
+          <tr><td>Physical</td><td><b>Bits</b></td><td>nothing &mdash; it's electricity, light or radio now</td></tr>
+        </table>
+        <div class="hook"><b>Hook</b><b>M</b>y <b>S</b>ister <b>D</b>raws <b>F</b>unny <b>B</b>irds = Message, Segment, Datagram, Frame, Bits.</div>
+      </div>
+      <div>
+        <div class="analogy"><b>Analogy</b>You write a note (<b>message</b>). You put it in an envelope marked "for the accounts <i>department</i>" (<b>segment</b> &mdash; port). You put that in a bigger envelope with the <i>company's</i> street address (<b>datagram</b> &mdash; IP). The courier puts that in his bag labelled with the <i>next depot</i> (<b>frame</b> &mdash; MAC), and the van drives (<b>bits</b>). At the far end everything is unwrapped in reverse and the note is read.</div>
+        <h4 class="step">The two facts people get wrong</h4>
+        <p class="small"><b>1. The MAC address changes at every hop; the IP address does not.</b> The outer bag is re-labelled at each depot, but the company's street address stays on the inner envelope the whole way. This single fact explains why there are two different addresses at all.</p>
+        <p class="small"><b>2. Headers are overhead.</b> A TCP header is 20 bytes and an IP header is 20 bytes, every single packet. That's why <b>MSS = 1460 = MTU 1500 &minus; 20 &minus; 20</b>, and why UDP's <b>8-byte</b> header is considered a real advantage over TCP's 20.</p>
+        <div class="trap"><b>Trap</b>"Packet" is used loosely in speech for <i>anything</i> being sent. In an exam answer, use the <b>exact</b> name for the layer you're discussing &mdash; segment at transport, datagram at network, frame at data link.</div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q8, Q9 (encapsulation figure), Q16 (TCP header), Q19 (UDP header) &mdash; and every sentence in the PDF containing the word "segment".</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">05</span><h3>The four addresses &mdash; and why one is not enough</h3></div>
+  <div class="lb">
+    <p class="bigq">Each layer has its own kind of address, because each layer answers a different question.</p>
+
+    <figure>
+<svg viewBox="0 0 700 168" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.8">
+<rect x="6" y="14" width="166" height="140" rx="6" fill="#EAF0FE" stroke="#1D4ED8" stroke-width="1.3"/>
+<text x="89" y="30" text-anchor="middle" font-weight="700" font-size="9" fill="#1D4ED8">Application</text>
+<text x="89" y="47" text-anchor="middle" font-size="8.4" font-weight="700">HOSTNAME / URL</text>
+<text x="89" y="60" text-anchor="middle" font-size="7.4">www.someschool.edu</text>
+<text x="89" y="71" text-anchor="middle" font-size="7.4">alice@crepes.fr</text>
+<text x="89" y="92" text-anchor="middle" font-size="7.6" font-weight="700">&ldquo;What is it called?&rdquo;</text>
+<text x="89" y="108" text-anchor="middle" font-size="7.2" fill="#6B7685">Human-friendly. Must be</text>
+<text x="89" y="118" text-anchor="middle" font-size="7.2" fill="#6B7685">translated to an IP by DNS</text>
+<text x="89" y="128" text-anchor="middle" font-size="7.2" fill="#6B7685">before anything can happen.</text>
+<text x="89" y="146" text-anchor="middle" font-size="7.2" font-weight="700" fill="#1D4ED8">variable length</text>
+
+<rect x="182" y="14" width="166" height="140" rx="6" fill="#F2ECFE" stroke="#6D28D9" stroke-width="1.3"/>
+<text x="265" y="30" text-anchor="middle" font-weight="700" font-size="9" fill="#6D28D9">Transport</text>
+<text x="265" y="47" text-anchor="middle" font-size="8.4" font-weight="700">PORT NUMBER</text>
+<text x="265" y="60" text-anchor="middle" font-size="7.4">80 &middot; 443 &middot; 53 &middot; 25 &middot; 21</text>
+<text x="265" y="92" text-anchor="middle" font-size="7.6" font-weight="700">&ldquo;Which PROGRAM?&rdquo;</text>
+<text x="265" y="108" text-anchor="middle" font-size="7.2" fill="#6B7685">One computer runs a browser,</text>
+<text x="265" y="118" text-anchor="middle" font-size="7.2" fill="#6B7685">a mail app and a game at once.</text>
+<text x="265" y="128" text-anchor="middle" font-size="7.2" fill="#6B7685">The port picks between them.</text>
+<text x="265" y="146" text-anchor="middle" font-size="7.2" font-weight="700" fill="#6D28D9">16 bits (0 &ndash; 65,535)</text>
+
+<rect x="358" y="14" width="166" height="140" rx="6" fill="#E4F3F7" stroke="#0E7490" stroke-width="1.3"/>
+<text x="441" y="30" text-anchor="middle" font-weight="700" font-size="9" fill="#0E7490">Network</text>
+<text x="441" y="47" text-anchor="middle" font-size="8.4" font-weight="700">IP ADDRESS</text>
+<text x="441" y="60" text-anchor="middle" font-size="7.4">192.168.1.10</text>
+<text x="441" y="92" text-anchor="middle" font-size="7.6" font-weight="700">&ldquo;Which COMPUTER?&rdquo;</text>
+<text x="441" y="108" text-anchor="middle" font-size="7.2" fill="#6B7685">Identifies the host globally.</text>
+<text x="441" y="118" text-anchor="middle" font-size="7.2" font-weight="700" fill="#0E7490">STAYS THE SAME</text>
+<text x="441" y="128" text-anchor="middle" font-size="7.2" fill="#6B7685">all the way, end to end.</text>
+<text x="441" y="146" text-anchor="middle" font-size="7.2" font-weight="700" fill="#0E7490">32 bits</text>
+
+<rect x="534" y="14" width="160" height="140" rx="6" fill="#FEF6DF" stroke="#92400E" stroke-width="1.3"/>
+<text x="614" y="30" text-anchor="middle" font-weight="700" font-size="9" fill="#92400E">Data link</text>
+<text x="614" y="47" text-anchor="middle" font-size="8.4" font-weight="700">MAC ADDRESS</text>
+<text x="614" y="60" text-anchor="middle" font-size="7.2">00:1A:2B:3C:4D:5E</text>
+<text x="614" y="92" text-anchor="middle" font-size="7.6" font-weight="700">&ldquo;Which NEXT DEVICE?&rdquo;</text>
+<text x="614" y="108" text-anchor="middle" font-size="7.2" fill="#6B7685">Burnt into the network card.</text>
+<text x="614" y="118" text-anchor="middle" font-size="7.2" font-weight="700" fill="#92400E">CHANGES AT EVERY HOP</text>
+<text x="614" y="128" text-anchor="middle" font-size="7.2" fill="#6B7685">&mdash; it is only local.</text>
+<text x="614" y="146" text-anchor="middle" font-size="7.2" font-weight="700" fill="#92400E">48 bits</text>
+</svg>
+    </figure>
+
+    <div class="two">
+      <div>
+        <div class="analogy"><b>The analogy that fixes this forever</b>Sending a parcel to a friend in a large apartment block:
+        <br><b>Hostname</b> = "Rahul's place" &mdash; what you call it. Useless to the courier until you look up the actual address.
+        <br><b>IP address</b> = the building's street address: <i>12 MG Road, Bengaluru</i>. Written on the parcel once, never changed.
+        <br><b>Port number</b> = the flat number: <i>#402</i>. Gets it to the right <i>person inside</i> the building.
+        <br><b>MAC address</b> = the label on the delivery van's bag saying which <i>depot it goes to next</i>. Re-labelled at every depot along the way.</div>
+        <h4 class="step">Why this is the single most useful lesson here</h4>
+        <p class="small">Half of the Strike Sheet's sentences are about one of these four addresses:</p>
+        <ul class="small">
+          <li><b>DNS</b> (7 past questions) exists only to turn a <b>hostname into an IP address</b>.</li>
+          <li><b>Multiplexing / demultiplexing</b> (4 questions) is entirely about <b>choosing the right port</b>.</li>
+          <li><b>The whole of Unit 3</b> (14 questions) is about structuring the <b>IP address</b>.</li>
+          <li><b>Switches vs routers</b> is MAC vs IP.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="step">Ports &mdash; the numbers to know</h4>
+        <table>
+          <tr><th>Port</th><th>Service</th><th>Transport</th></tr>
+          <tr><td><b>20 / 21</b></td><td>FTP data / FTP control</td><td>TCP</td></tr>
+          <tr><td><b>25</b></td><td>SMTP (sending mail)</td><td>TCP</td></tr>
+          <tr><td><b>53</b></td><td>DNS</td><td><b>UDP</b></td></tr>
+          <tr><td><b>80</b></td><td>HTTP</td><td>TCP</td></tr>
+          <tr><td><b>110</b></td><td>POP3 (reading mail)</td><td>TCP</td></tr>
+          <tr><td><b>143</b></td><td>IMAP (reading mail)</td><td>TCP</td></tr>
+          <tr><td><b>443</b></td><td>HTTPS</td><td>TCP</td></tr>
+        </table>
+        <p class="small">Ports <b>0&ndash;1023</b> are <b>well-known</b> ports, reserved for standard services. A client program gets a random high port (like <b>19157</b> or <b>26145</b>) assigned by its operating system &mdash; that's why past-paper examples use odd-looking numbers.</p>
+        <div class="hook"><b>Hook</b>A <b>socket</b> is just <b>IP + port</b> glued together: <i>which computer</i> + <i>which program on it</i>. When the Strike Sheet says "UDP socket = 2-tuple, TCP socket = 4-tuple", it means UDP identifies a conversation by the <b>destination</b> pair only, while TCP needs <b>both</b> ends' pairs.</div>
+        <div class="trap"><b>Trap</b>An IP address identifies a <b>host</b>, not a <b>process</b>. That one sentence is the entire reason the transport layer exists &mdash; the network layer gets data to the right machine, the transport layer gets it to the right program. Examiners love the phrase <b>"process-to-process delivery"</b>.</div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q1&ndash;Q3 (DNS), Q9 (addresses per layer), Q18 (mux/demux, sockets, tuples) and all of Unit 3.</div>
+  </div>
+</article>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">05b</span><h3>Quick reference &mdash; the OSI and TCP/IP stacks side by side</h3></div>
+  <div class="lb">
+    <p class="small">Two models for the same thing. <b>OSI has 7 layers and is a teaching model.</b> <b>TCP/IP has 5 and is what actually runs the Internet.</b> The syllabus wants both, and the difference is always the same question.</p>
+    <div class="two">
+      <div>
+        <table>
+          <tr><th>OSI (7)</th><th>TCP/IP (5)</th><th>Job in one phrase</th></tr>
+          <tr><td>7 Application</td><td rowspan="3" style="background:#EAF0FE;font-weight:700;vertical-align:middle">Application</td><td>What the user wants</td></tr>
+          <tr><td>6 Presentation</td><td>Format, encrypt, compress</td></tr>
+          <tr><td>5 Session</td><td>Manage the conversation</td></tr>
+          <tr><td>4 Transport</td><td>Transport</td><td>Right program, reliably</td></tr>
+          <tr><td>3 Network</td><td>Network</td><td>Right computer, across networks</td></tr>
+          <tr><td>2 Data link</td><td>Data link</td><td>Right next device, this link</td></tr>
+          <tr><td>1 Physical</td><td>Physical</td><td>Bits on the medium</td></tr>
+        </table>
+      </div>
+      <div>
+        <p class="small"><b>Session and presentation are missing from TCP/IP.</b> Two reasons: (1) TCP/IP has more than one transport protocol and some session functions already live inside them; (2) the application layer isn't one piece of software, so an app that needs session or presentation features <b>builds them in itself</b>.</p>
+        <p class="small"><b>Why OSI never took over &mdash; 3 reasons:</b> it was finished <b>too late</b> (TCP/IP was already deployed with time and money invested), some layers were <b>never fully defined</b>, and it had <b>poor performance</b> when implemented.</p>
+        <div class="hook"><b>Hook</b><b>ISO is the organisation. OSI is the model.</b> ISO was founded in 1947; OSI arrived in the late 1970s. Mixing these two up is an easy mark to lose.</div>
+        <div class="analogy"><b>Analogy</b>OSI is the <b>architect's drawing</b> with every room labelled. TCP/IP is the <b>building that actually got built</b> &mdash; a few rooms got merged on site.</div>
+      </div>
+    </div>
+    <div class="unlock g1"><b>This unlocks</b>Strike Sheet Q8 and Q9.</div>
+  </div>
+</article>
+</section>
+<!-- ================= PART B ================= -->
+<section class="sheet u3">
+  <div class="secbar"><span class="sn">PART B</span><h2>The maths you cannot skip</h2><span class="meta">Lessons 6 &ndash; 10 &middot; Unit 3 is 80&nbsp;% numerical</span></div>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">06</span><h3>Bits, bytes, octets &mdash; and the powers of 2 you must know by sight</h3></div>
+  <div class="lb">
+    <p class="bigq">A bit is one 0 or 1. Eight bits make one byte. In networking a byte is called an <b>octet</b>.</p>
+    <div class="two">
+      <div>
+        <p class="small">An <b>IPv4 address is 32 bits</b> = 4 octets, written as four decimal numbers with dots: <code>192.168.1.10</code>. Each octet is 8 bits, so each can hold <b>0 to 255</b> (that is 2<sup>8</sup> = 256 different values, counting from 0).</p>
+        <p class="small">The <b>address space</b> is the total number of addresses a protocol can express. With <i>b</i> bits it is <b>2<sup>b</sup></b>. For IPv4: <b>2<sup>32</sup> = 4,294,967,296</b> &mdash; about 4.3 billion. That number is the reason the entire second half of Unit 3 exists.</p>
+        <h4 class="step">Why 2<sup>n</sup> and nothing else</h4>
+        <p class="small">Every time you add one bit you <b>double</b> the possibilities. One bit = 2 values. Two bits = 4. Three bits = 8. This is why <b>every block size in Unit 3 is a power of 2</b> and why a request for 1000 addresses gets you 1024 &mdash; there is no such thing as a 1000-address block.</p>
+        <div class="trap"><b>Trap</b>Count from <b>zero</b>. 8 bits give <b>256</b> values but the <b>largest</b> is <b>255</b>. An octet of 301 is invalid; so is a leading zero like <code>045</code>.</div>
+      </div>
+      <div>
+        <h4 class="step">The table to memorise &mdash; seriously, memorise it</h4>
+        <table class="pow">
+          <tr><th>n</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+          <tr><td><b>2<sup>n</sup></b></td><td>1</td><td>2</td><td>4</td><td>8</td><td><b>16</b></td><td>32</td><td><b>64</b></td><td><b>128</b></td><td><b>256</b></td></tr>
+          <tr><th>n</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>16</th><th>21</th><th>24</th></tr>
+          <tr><td><b>2<sup>n</sup></b></td><td>512</td><td><b>1024</b></td><td>2048</td><td>4096</td><td>8192</td><td>16,384</td><td><b>65,536</b></td><td>2,097,152</td><td><b>16,777,216</b></td></tr>
+        </table>
+        <p class="small">Those bold ones are the numbers that appear in actual exam questions: <b>16, 64, 128, 256</b> (subnet sizes), <b>1024</b> (the ISP example), <b>65,536</b> (class B), <b>16,777,216</b> (class A), <b>2,097,152</b> (number of class C blocks).</p>
+        <div class="hook"><b>Hook</b>You only need to count doubles from 1: <b>1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024</b>. Everything bigger is 1024 doubled a few more times. And <b>2<sup>10</sup> ≈ 1000</b>, so 2<sup>20</sup> ≈ a million and 2<sup>30</sup> ≈ a billion &mdash; that's how you sanity-check 2<sup>32</sup> ≈ 4 billion in two seconds.</div>
+      </div>
+    </div>
+    <div class="unlock g3"><b>This unlocks</b>Every Unit 3 numerical &mdash; Strike Sheet Q20&ndash;Q25.</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">07</span><h3>Decimal &harr; binary &harr; hexadecimal &mdash; the 30-second methods</h3></div>
+  <div class="lb">
+    <p class="bigq">You will have to convert one octet to binary in the exam. Here is the only method you need.</p>
+
+    <figure>
+<svg viewBox="0 0 700 118" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="8">
+<text x="6" y="11" font-size="8.4" font-weight="700" fill="#131A24">Write the place values once, then just tick them off. Example: convert <tspan font-family="DejaVu Sans Mono">89</tspan> to binary.</text>
+<g>
+<rect x="60" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="95" y="32" text-anchor="middle" font-weight="700">128</text>
+<rect x="130" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="165" y="32" text-anchor="middle" font-weight="700">64</text>
+<rect x="200" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="235" y="32" text-anchor="middle" font-weight="700">32</text>
+<rect x="270" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="305" y="32" text-anchor="middle" font-weight="700">16</text>
+<rect x="340" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="375" y="32" text-anchor="middle" font-weight="700">8</text>
+<rect x="410" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="445" y="32" text-anchor="middle" font-weight="700">4</text>
+<rect x="480" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="515" y="32" text-anchor="middle" font-weight="700">2</text>
+<rect x="550" y="18" width="70" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="585" y="32" text-anchor="middle" font-weight="700">1</text></g>
+<text x="52" y="32" text-anchor="end" font-size="7.4" fill="#6B7685">value</text>
+<g font-family="DejaVu Sans Mono" font-size="11" font-weight="700">
+<rect x="60" y="40" width="70" height="22" fill="#fff" stroke="#0E7490"/><text x="95" y="56" text-anchor="middle" fill="#BE123C">0</text>
+<rect x="130" y="40" width="70" height="22" fill="#DEF2EF" stroke="#0E7490"/><text x="165" y="56" text-anchor="middle" fill="#0E7490">1</text>
+<rect x="200" y="40" width="70" height="22" fill="#fff" stroke="#0E7490"/><text x="235" y="56" text-anchor="middle" fill="#BE123C">0</text>
+<rect x="270" y="40" width="70" height="22" fill="#DEF2EF" stroke="#0E7490"/><text x="305" y="56" text-anchor="middle" fill="#0E7490">1</text>
+<rect x="340" y="40" width="70" height="22" fill="#DEF2EF" stroke="#0E7490"/><text x="375" y="56" text-anchor="middle" fill="#0E7490">1</text>
+<rect x="410" y="40" width="70" height="22" fill="#fff" stroke="#0E7490"/><text x="445" y="56" text-anchor="middle" fill="#BE123C">0</text>
+<rect x="480" y="40" width="70" height="22" fill="#fff" stroke="#0E7490"/><text x="515" y="56" text-anchor="middle" fill="#BE123C">0</text>
+<rect x="550" y="40" width="70" height="22" fill="#DEF2EF" stroke="#0E7490"/><text x="585" y="56" text-anchor="middle" fill="#0E7490">1</text></g>
+<text x="52" y="56" text-anchor="end" font-size="7.4" fill="#6B7685">bit</text>
+<text x="632" y="56" font-size="8" font-weight="700" fill="#0E7490">= 01011001</text>
+<text x="6" y="78" font-size="7.8">Working, left to right: 128 &gt; 89, so <tspan font-weight="700">0</tspan>. &nbsp; 64 &#8804; 89, so <tspan font-weight="700">1</tspan>, remainder 89&#8722;64 = 25. &nbsp; 32 &gt; 25, so <tspan font-weight="700">0</tspan>. &nbsp; 16 &#8804; 25, so <tspan font-weight="700">1</tspan>, remainder 9.</text>
+<text x="6" y="90" font-size="7.8">8 &#8804; 9, so <tspan font-weight="700">1</tspan>, remainder 1. &nbsp; 4 &gt; 1, so <tspan font-weight="700">0</tspan>. &nbsp; 2 &gt; 1, so <tspan font-weight="700">0</tspan>. &nbsp; 1 &#8804; 1, so <tspan font-weight="700">1</tspan>, remainder 0. &nbsp; Check: 64 + 16 + 8 + 1 = 89. &#10003;</text>
+<rect x="6" y="98" width="688" height="16" rx="3" fill="#FEF6DF" stroke="#F2DFA8"/>
+<text x="350" y="109" text-anchor="middle" font-size="7.8" font-weight="700" fill="#92400E">Going back is even easier: add up the place values wherever there is a 1.</text>
+</svg>
+    </figure>
+
+    <div class="three">
+      <div>
+        <h4 class="step">Binary &rarr; decimal</h4>
+        <p class="small">Add the place values under the 1s.</p>
+        <div class="codeblk lite"><span class="m">  128 64 32 16  8  4  2  1</span>
+    1  1  0  0  0  0  0  0
+= 128 + 64
+= <span class="g">192</span>
+
+<span class="m">  128 64 32 16  8  4  2  1</span>
+    1  1  1  0  0  0  0  0
+= 128 + 64 + 32
+= <span class="g">224</span></div>
+        <p class="small">This is exactly how you turn a <b>/26</b> into <b>255.255.255.192</b>: the prefix leaves 2 ones in the last octet, and 128 + 64 = 192.</p>
+      </div>
+      <div>
+        <h4 class="step">Decimal &rarr; hexadecimal</h4>
+        <p class="small">Hex digits are <b>0&ndash;9 then A B C D E F</b> (A = 10 … F = 15). Each octet becomes exactly <b>2 hex digits</b>: split the 8 bits into two groups of 4, convert each.</p>
+        <table class="pow">
+          <tr><th>bits</th><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td></tr>
+          <tr><th>hex</th><td><b>0</b></td><td><b>1</b></td><td><b>2</b></td><td><b>3</b></td><td><b>4</b></td><td><b>5</b></td><td><b>6</b></td><td><b>7</b></td></tr>
+          <tr><th>bits</th><td>1000</td><td>1001</td><td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td></tr>
+          <tr><th>hex</th><td><b>8</b></td><td><b>9</b></td><td><b>A</b></td><td><b>B</b></td><td><b>C</b></td><td><b>D</b></td><td><b>E</b></td><td><b>F</b></td></tr>
+        </table>
+      </div>
+      <div>
+        <h4 class="step">The slide's worked example</h4>
+        <div class="codeblk lite"><span class="k">128.11.3.31</span>
+
+128 = 1000 0000 = <span class="g">80</span>
+ 11 = 0000 1011 = <span class="g">0B</span>
+  3 = 0000 0011 = <span class="g">03</span>
+ 31 = 0001 1111 = <span class="g">1F</span>
+
+&#8594; <span class="g">800B031F</span></div>
+        <p class="small">And the "spot the error" exercise:</p>
+        <table>
+          <tr><td class="mono">111.56.<b>045</b>.78</td><td>leading zero</td></tr>
+          <tr><td class="mono">221.34.7.8<b>.20</b></td><td>5 octets</td></tr>
+          <tr><td class="mono">75.45.<b>301</b>.14</td><td>&gt; 255</td></tr>
+          <tr><td class="mono"><b>11100010</b>.23.14.67</td><td>mixed notations</td></tr>
+        </table>
+        <div class="hook"><b>Hook</b>The only three notations are <b>binary, dotted-decimal and hexadecimal</b>. Never mix them in one address.</div>
+      </div>
+    </div>
+    <div class="unlock g3"><b>This unlocks</b>Strike Sheet Q20 (mask in binary), Q27 (notations) and every "first/last address" calculation.</div>
+  </div>
+</article>
+<article class="lesson">
+  <div class="lh"><span class="ln">08</span><h3>log<sub>2</sub> &mdash; what it means and how to do it in your head</h3></div>
+  <div class="lb">
+    <p class="bigq">log<sub>2</sub> N simply asks: <i>"2 to the power of what gives N?"</i> Nothing more.</p>
+    <div class="two">
+      <div>
+        <p class="small">log<sub>2</sub> 256 = <b>8</b>, because 2<sup>8</sup> = 256. log<sub>2</sub> 64 = <b>6</b>. log<sub>2</sub> 16 = <b>4</b>. You are <b>reading your powers-of-2 table backwards</b> &mdash; that is the entire operation. No calculator, no log tables.</p>
+        <p class="small">It appears in exactly one formula in your syllabus:</p>
+        <div class="formula" style="border-color:var(--u3)">n<sub>sub</sub> = 32 &minus; log<sub>2</sub> N<sub>sub</sub></div>
+        <p class="small">Which in plain words is: <b>"the prefix length is 32 minus the number of host bits, and the number of host bits is however many doublings it takes to reach the block size."</b></p>
+        <div class="analogy"><b>Analogy</b>If 2<sup>n</sup> is "fold the paper n times", then log<sub>2</sub> is "how many folds did that take?" Doubling and halving are the same question asked in two directions.</div>
+      </div>
+      <div>
+        <h4 class="step">The lookup you will actually use</h4>
+        <table class="pow">
+          <tr><th>Block size N</th><th>4</th><th>8</th><th>16</th><th>32</th><th>64</th><th>128</th><th>256</th><th>512</th><th>1024</th></tr>
+          <tr><td><b>log<sub>2</sub> N</b> (host bits)</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+          <tr><td><b>prefix = 32 &minus; that</b></td><td>/30</td><td>/29</td><td><b>/28</b></td><td>/27</td><td><b>/26</b></td><td><b>/25</b></td><td>/24</td><td><b>/23</b></td><td>/22</td></tr>
+        </table>
+        <p class="small">Read it right to left and you have the other direction too: a <b>/26</b> has 32 &minus; 26 = <b>6 host bits</b>, so <b>2<sup>6</sup> = 64 addresses</b>.</p>
+        <div class="hook"><b>Hook</b><b>Bigger prefix = smaller block.</b> /24 is 256 addresses; /26 is 64; /28 is 16. The slash counts the <b>network</b> bits, so the more bits the network takes, the fewer are left for hosts.</div>
+        <div class="trap"><b>Trap</b>If a requirement is <b>not</b> a power of 2, <b>round up</b>. 1000 addresses &rarr; 1024 &rarr; /22. 50 &rarr; 64 &rarr; /26. 120 &rarr; 128 &rarr; /25. You can never allocate exactly 1000, because n would not be a whole number.</div>
+      </div>
+    </div>
+    <div class="unlock g3"><b>This unlocks</b>Strike Sheet Q21, Q22, Q23 (all subnetting design).</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">09</span><h3>Bitwise AND, OR and NOT &mdash; the operation behind every addressing sum</h3></div>
+  <div class="lb">
+    <p class="bigq">"Bitwise" means: line the two numbers up in binary and apply the rule to each column independently. No carrying.</p>
+    <div class="three">
+      <div>
+        <h4 class="step">The three truth tables</h4>
+        <table class="pow">
+          <tr><th>A</th><th>B</th><th>A AND B</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td><b>1</b></td></tr>
+        </table>
+        <p class="small"><b>AND = both must be 1.</b> Think of it as a filter that <b>keeps</b> a bit only where the mask has a 1, and <b>zeroes</b> everything else.</p>
+        <table class="pow">
+          <tr><th>A</th><th>B</th><th>A OR B</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td><b>1</b></td></tr>
+          <tr><td>1</td><td>0</td><td><b>1</b></td></tr>
+          <tr><td>1</td><td>1</td><td><b>1</b></td></tr>
+        </table>
+        <p class="small"><b>OR = at least one is 1.</b> It <b>forces</b> a bit to 1 wherever the other operand has a 1.</p>
+        <table class="pow">
+          <tr><th>A</th><th>NOT A</th></tr>
+          <tr><td>0</td><td><b>1</b></td></tr>
+          <tr><td>1</td><td>0</td></tr>
+        </table>
+        <p class="small"><b>NOT = flip every bit.</b> So NOT(255.255.255.192) = 0.0.0.63.</p>
+      </div>
+      <div style="grid-column:span 2">
+        <h4 class="step">Why Unit 3 uses them &mdash; worked on 156.180.150.89/26</h4>
+        <div class="codeblk lite"><span class="m">The mask for /26: 26 ones, then 6 zeros</span>
+mask = 11111111.11111111.11111111.<span class="k">11000000</span>
+     = 255.255.255.<span class="k">192</span>
+
+<span class="k">FIRST address = address AND mask</span>   <span class="m">&#8594; zero the host bits</span>
+   last octet 89 = 0 1 0 1 1 0 0 1
+   mask      192 = 1 1 0 0 0 0 0 0
+   AND           = <span class="g">0 1 0 0 0 0 0 0</span> = <span class="g">64</span>
+   <span class="m">(kept the first 2 bits, forced the other 6 to 0)</span>
+   &#8594; <span class="g">156.180.150.64</span>
+
+<span class="k">LAST address = address OR NOT(mask)</span>  <span class="m">&#8594; set the host bits</span>
+   NOT(192)      = 0 0 1 1 1 1 1 1  = 63
+   last octet 89 = 0 1 0 1 1 0 0 1
+   OR            = <span class="g">0 1 1 1 1 1 1 1</span> = <span class="g">127</span>
+   <span class="m">(kept the first 2 bits, forced the other 6 to 1)</span>
+   &#8594; <span class="g">156.180.150.127</span>
+
+<span class="k">COUNT = NOT(mask) + 1</span> = 63 + 1 = <span class="g">64</span>  <span class="m">(= 2&#179;&#178;&#8315;&#178;&#8310;)</span></div>
+        <div class="analogy"><b>Analogy</b>The mask is a <b>stencil</b>. The 1s are holes you can see through; the 0s are covered. <b>AND</b> shows you only the network part with the rest blanked to 0 &mdash; that's the <b>first</b> address. <b>OR with the inverted stencil</b> fills the covered part solid with 1s &mdash; that's the <b>last</b> address.</div>
+        <div class="hook"><b>Hook</b><b>"AND for first, OR-NOT for last, NOT+1 for the count."</b> Say it three times. It is the only thing you need for Strike Sheet Q20, and it feeds Q21&ndash;Q23 too.</div>
+        <div class="trap"><b>Trap</b>You almost never need to touch the first three octets &mdash; for any prefix of 24 or more they are unchanged. <b>Do the binary on the last octet only.</b> That turns a scary question into eight columns of arithmetic.</div>
+      </div>
+    </div>
+    <div class="unlock g3"><b>This unlocks</b>Strike Sheet Q20 and the method box at the top of Unit 3.</div>
+  </div>
+</article>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">10</span><h3>Why usable hosts = N &minus; 2, and what "network" and "broadcast" addresses are</h3></div>
+  <div class="lb">
+    <div class="two">
+      <div>
+        <p>In every block of N addresses, <b>two are reserved and cannot be given to a device</b>:</p>
+        <ul>
+          <li>The <b>first</b> address (all host bits = 0) is the <b>network address</b>. It names the <i>network itself</i>, and it is what a router looks up in its <b>forwarding table</b> to decide which interface to send a packet out of.</li>
+          <li>The <b>last</b> address (all host bits = 1) is the <b>broadcast address</b>. A packet sent to it goes to <b>every</b> host on that network.</li>
+        </ul>
+        <div class="formula" style="border-color:var(--u3)">usable hosts = N &minus; 2 = 2<sup>32&minus;n</sup> &minus; 2</div>
+        <p class="small">So a <b>/26</b> has 64 addresses but only <b>62</b> usable; a <b>/28</b> has 16 but only <b>14</b>; a class C has 256 but only <b>254</b>.</p>
+      </div>
+      <div>
+        <div class="analogy"><b>Analogy</b>In a block of flats, flat numbers run 0 to 63 &mdash; but "0" is the name of the <b>building itself</b> on the gate, and "63" is the <b>public address system</b> that reaches every flat. Neither can be a person's home. 62 families can live there.</div>
+        <div class="trap"><b>Trap &mdash; this one costs marks every year</b>When a question says <i>"total number of <b>valid</b> IP addresses"</i>, the word is ambiguous. <b>Write both</b>: "<b>64</b> addresses in the block, of which <b>62</b> are usable host addresses." You cannot be marked down for the complete answer.</div>
+        <div class="hook"><b>Hook</b><b>First and last are always spoken for.</b> First = the network's name, last = shout to everyone.</div>
+      </div>
+    </div>
+    <div class="unlock g3"><b>This unlocks</b>Strike Sheet Q20, Q23, Q24 and the mask table.</div>
+  </div>
+</article>
+</section>
+<!-- ================= PART C ================= -->
+<section class="sheet u2">
+  <div class="secbar"><span class="sn">PART C</span><h2>How the conversation works</h2><span class="meta">Lessons 11 &ndash; 13</span></div>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">11</span><h3>Processes, clients, servers and sockets</h3></div>
+  <div class="lb">
+    <div class="two">
+      <div>
+        <p class="bigq">Computers don't talk to computers. <b>Programs talk to programs.</b></p>
+        <ul>
+          <li>A <b>program</b> is the file on disk. A <b>process</b> is that program <i>while it is running</i>. Networking happens between processes.</li>
+          <li>A <b>client</b> is the process that <b>starts</b> the conversation by sending a request.</li>
+          <li>A <b>server</b> is the process that is <b>always on</b>, waiting, and sends a response. It has a <b>fixed, well-known address</b> so clients can find it.</li>
+          <li>A <b>socket</b> is the doorway between a process and the network. <b>Socket = IP address + port number.</b></li>
+        </ul>
+        <p class="small">This is why the transport layer's job is called <b>process-to-process delivery</b> (sometimes <i>service-to-service</i>). The network layer only manages <b>host-to-host</b> &mdash; it gets the data to the right machine and stops there.</p>
+        <div class="analogy"><b>Analogy</b>The <b>IP address</b> gets the letter to the right building, the <b>port</b> to the right flat, and the <b>socket</b> is that flat's letterbox &mdash; the slot the program reads from and writes into.</div>
+      </div>
+      <div>
+        <figure style="margin-top:0">
+<svg viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.6">
+<defs><marker id="s1" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#6D28D9"/></marker></defs>
+<rect x="6" y="18" width="130" height="118" rx="6" fill="#F2ECFE" stroke="#6D28D9" stroke-width="1.3"/>
+<text x="71" y="14" text-anchor="middle" font-weight="700" font-size="8">CLIENT HOST &middot; IP 10.0.0.5</text>
+<rect x="14" y="26" width="52" height="24" rx="4" fill="#fff" stroke="#6D28D9"/><text x="40" y="36" text-anchor="middle" font-size="7">browser</text><text x="40" y="45" text-anchor="middle" font-size="6.6">process</text>
+<rect x="76" y="26" width="52" height="24" rx="4" fill="#fff" stroke="#6D28D9"/><text x="102" y="36" text-anchor="middle" font-size="7">mail app</text><text x="102" y="45" text-anchor="middle" font-size="6.6">process</text>
+<rect x="14" y="56" width="52" height="18" rx="3" fill="#6D28D9"/><text x="40" y="68" text-anchor="middle" fill="#fff" font-size="6.6">port 19157</text>
+<rect x="76" y="56" width="52" height="18" rx="3" fill="#6D28D9"/><text x="102" y="68" text-anchor="middle" fill="#fff" font-size="6.6">port 50231</text>
+<text x="71" y="86" text-anchor="middle" font-size="6.8" fill="#6B7685">sockets = 10.0.0.5 : port</text>
+<rect x="14" y="92" width="114" height="18" rx="3" fill="#fff" stroke="#9AA7B8"/><text x="71" y="104" text-anchor="middle" font-size="7">transport layer (mux)</text>
+<rect x="14" y="112" width="114" height="18" rx="3" fill="#fff" stroke="#9AA7B8"/><text x="71" y="124" text-anchor="middle" font-size="7">network &rarr; one link out</text>
+<rect x="194" y="18" width="130" height="118" rx="6" fill="#F2ECFE" stroke="#6D28D9" stroke-width="1.3"/>
+<text x="259" y="14" text-anchor="middle" font-weight="700" font-size="8">SERVER HOST &middot; IP 93.1.2.3</text>
+<rect x="202" y="26" width="114" height="24" rx="4" fill="#fff" stroke="#6D28D9"/><text x="259" y="36" text-anchor="middle" font-size="7">web server process</text><text x="259" y="45" text-anchor="middle" font-size="6.6">always on, waiting</text>
+<rect x="202" y="56" width="114" height="18" rx="3" fill="#131A24"/><text x="259" y="68" text-anchor="middle" fill="#fff" font-size="6.8" font-weight="700">port 80 &mdash; well known</text>
+<rect x="202" y="92" width="114" height="18" rx="3" fill="#fff" stroke="#9AA7B8"/><text x="259" y="104" text-anchor="middle" font-size="7">transport layer (demux)</text>
+<rect x="202" y="112" width="114" height="18" rx="3" fill="#fff" stroke="#9AA7B8"/><text x="259" y="124" text-anchor="middle" font-size="7">network in</text>
+<line x1="138" y1="100" x2="192" y2="100" stroke="#6D28D9" stroke-width="1.4" marker-end="url(#s1)"/>
+<text x="165" y="96" text-anchor="middle" font-size="6.6">request</text>
+<line x1="192" y1="120" x2="140" y2="120" stroke="#6D28D9" stroke-width="1.4" marker-end="url(#s1)"/>
+<text x="165" y="134" text-anchor="middle" font-size="6.6">response</text>
+<text x="165" y="146" text-anchor="middle" font-size="6.8" fill="#6B7685">mux = many processes &rarr; one stream &middot; demux = one stream &rarr; right process</text>
+</svg>
+        </figure>
+        <p class="small"><b>Client-server vs P2P.</b> In <b>client-server</b>, one always-on server with a fixed address serves everyone, and clients never talk to each other. In <b>peer-to-peer (P2P)</b>, the hosts talk directly and each peer both downloads <i>and</i> uploads &mdash; which is why P2P is called <b>self-scaling</b>: every new peer adds capacity instead of only adding load.</p>
+        <div class="hook"><b>Hook</b><b>The client knows where the server is; the server does not know where the client is</b> until the client speaks. That's why servers get fixed well-known ports and clients get random high ones.</div>
+      </div>
+    </div>
+    <div class="unlock g2"><b>This unlocks</b>Strike Sheet Q18 (mux/demux, 2-tuple vs 4-tuple), the Unit 1 insurance page (P2P) and every "client/server" sentence in Unit 1.</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">12</span><h3>Bits vs bytes, Mbps, and the four delays</h3></div>
+  <div class="lb">
+    <div class="two">
+      <div>
+        <h4 class="step">Units &mdash; get this wrong and a whole numerical collapses</h4>
+        <table>
+          <tr><th>Symbol</th><th>Means</th><th>Note</th></tr>
+          <tr><td><b>b</b> (small)</td><td><b>bit</b></td><td>Link speeds are in bits: Mb<b>ps</b> = megabits per second</td></tr>
+          <tr><td><b>B</b> (capital)</td><td><b>byte</b> = 8 bits</td><td>File and buffer sizes are in bytes: RcvBuffer = 4096 <b>B</b></td></tr>
+          <tr><td>Kbps / Mbps</td><td>1,000 / 1,000,000 bits per second</td><td><b>300 Kbps = 0.3 Mbps</b></td></tr>
+          <tr><td>Gbit</td><td>1,000 Mbits</td><td><b>15 Gbits = 15,000 Mbits</b></td></tr>
+        </table>
+        <div class="trap"><b>Trap</b>In the P2P numerical the peers upload at <b>300 Kbps</b> and the server at <b>30 Mbps</b>. If you add 300 + 30 you get a wrong answer. Convert first: <b>0.3 Mbps</b>. The Strike Sheet flags this; now you know why.</div>
+        <div class="formula" style="border-color:var(--u2)">transmission time = L / R = (packet length in bits) / (link rate in bits per second)</div>
+        <p class="small">A 1 Mbit object onto a 15 Mbps link takes 1/15 s. That is <b>transmission</b> time, not travel time.</p>
+      </div>
+      <div>
+        <h4 class="step">The four delays a packet experiences at each hop</h4>
+        <figure style="margin-top:2px">
+<svg viewBox="0 0 330 112" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.4">
+<rect x="6" y="30" width="56" height="34" rx="4" fill="#F2ECFE" stroke="#6D28D9"/><text x="34" y="50" text-anchor="middle" font-weight="700" font-size="7.6">Router A</text>
+<rect x="268" y="30" width="56" height="34" rx="4" fill="#F2ECFE" stroke="#6D28D9"/><text x="296" y="50" text-anchor="middle" font-weight="700" font-size="7.6">Router B</text>
+<line x1="62" y1="47" x2="268" y2="47" stroke="#131A24" stroke-width="2"/>
+<rect x="66" y="12" width="56" height="14" rx="2" fill="#FEF6DF" stroke="#92400E"/><text x="94" y="22" text-anchor="middle" font-size="6.6">1 processing</text>
+<line x1="94" y1="26" x2="60" y2="38" stroke="#92400E" stroke-width=".9"/>
+<rect x="66" y="72" width="56" height="14" rx="2" fill="#FEF6DF" stroke="#92400E"/><text x="94" y="82" text-anchor="middle" font-size="6.6">2 queuing</text>
+<line x1="94" y1="72" x2="60" y2="58" stroke="#92400E" stroke-width=".9"/>
+<rect x="128" y="12" width="70" height="14" rx="2" fill="#E4F3F7" stroke="#0E7490"/><text x="163" y="22" text-anchor="middle" font-size="6.6">3 transmission</text>
+<line x1="163" y1="26" x2="120" y2="43" stroke="#0E7490" stroke-width=".9"/>
+<rect x="196" y="72" width="70" height="14" rx="2" fill="#E4F3F7" stroke="#0E7490"/><text x="231" y="82" text-anchor="middle" font-size="6.6">4 propagation</text>
+<line x1="231" y1="72" x2="200" y2="52" stroke="#0E7490" stroke-width=".9"/>
+<text x="165" y="100" text-anchor="middle" font-size="7" fill="#6B7685">total nodal delay = 1 + 2 + 3 + 4</text>
+<text x="165" y="110" text-anchor="middle" font-size="7" font-weight="700" fill="#131A24">RTT = the whole round trip, there and back</text>
+</svg>
+        </figure>
+        <table>
+          <tr><th>Delay</th><th>Caused by</th></tr>
+          <tr><td><b>1 Processing</b></td><td>Router examines the header and decides the outgoing link</td></tr>
+          <tr><td><b>2 Queuing</b></td><td>Waiting in the buffer behind other packets. <b>The only one that varies</b> &mdash; this is what causes <b>jitter</b> and what <b>congestion</b> makes worse.</td></tr>
+          <tr><td><b>3 Transmission</b></td><td>Pushing all the bits onto the link = <b>L / R</b></td></tr>
+          <tr><td><b>4 Propagation</b></td><td>The signal physically travelling down the wire</td></tr>
+        </table>
+        <p class="small"><b>Traffic intensity</b> = (arrival rate &times; packet size) / link rate. As it approaches <b>1</b>, queuing delay <b>grows without bound</b> &mdash; that is the whole point of the web-caching numerical, where the access link hits intensity exactly 1.</p>
+        <div class="hook"><b>Hook</b><b>Transmission = how long to get the bits <i>out of the door</i>. Propagation = how long they take to <i>travel</i>.</b> A truck loading (transmission) is separate from the truck driving (propagation).</div>
+      </div>
+    </div>
+    <div class="unlock g2"><b>This unlocks</b>The web-caching numerical, the P2P numerical, flow-control's 100 Mbps question, and the words "jitter" and "congestion".</div>
+  </div>
+</article>
+
+<article class="lesson">
+  <div class="lh"><span class="ln">13</span><h3>RTT &mdash; the unit everything in this course is priced in</h3></div>
+  <div class="lb">
+    <div class="two">
+      <div>
+        <p class="bigq">RTT (round-trip time) = the time for a small packet to travel from client to server <b>and back</b>.</p>
+        <p>It includes propagation, queuing and processing delays. Since you cannot make light faster, RTT is the course's <b>fundamental cost unit</b>: protocols are judged by <b>how many RTTs</b> they need.</p>
+        <p class="small"><b>Opening a TCP connection costs 1 RTT</b> (the first two parts of the handshake); <b>requesting an object and getting it back costs another</b>. Hence the formula running through all of HTTP:</p>
+        <div class="formula" style="border-color:var(--u1)">response time per object = 2 RTT + transmit time</div>
+        <p class="small">And that single formula is why persistent connections were invented: reusing one connection saves the setup RTT on every object after the first. <b>11 objects: 22 RTT non-persistent, 12 RTT persistent, ~3 RTT pipelined.</b></p>
+      </div>
+      <div>
+        <h4 class="step">Where RTT shows up again</h4>
+        <ul class="small">
+          <li><b>TCP's timeout.</b> How long before a sender assumes loss? Slightly longer than one RTT &mdash; but RTT fluctuates, so TCP keeps a smoothed average (<b>EstimatedRTT</b>) plus a margin of <b>4 &times; DevRTT</b>. That is all Strike Sheet Q14 is.</li>
+          <li><b>Congestion control.</b> cwnd grows "1 MSS <b>per RTT</b>" in congestion avoidance and <b>doubles every RTT</b> in slow start. The RTT is the clock the algorithm ticks on.</li>
+          <li><b>Fairness.</b> Connections with a <b>shorter RTT grow faster</b> and grab more bandwidth &mdash; a known unfairness in TCP.</li>
+        </ul>
+        <div class="analogy"><b>Analogy</b>RTT is the "ping" number gamers complain about. 20 ms feels instant; 300 ms feels broken. Every protocol decision in Units 1 and 2 is really a decision about <b>how many times you are willing to pay that number</b>.</div>
+        <div class="hook"><b>Hook</b><b>Count RTTs, not seconds.</b> When any HTTP or TCP question asks "which is faster and why", the answer is always "because it costs fewer round trips."</div>
+      </div>
+    </div>
+    <div class="unlock g2"><b>This unlocks</b>Strike Sheet Q6 (persistent vs non-persistent), Q14 (RTT numerical) and Q11 (congestion control).</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">14</span><h3>TCP vs UDP &mdash; the one split the whole of Unit 2 hangs on</h3></div>
+  <div class="lb">
+    <p class="bigq">The network layer (IP) is <b>unreliable by design</b>. It does its best and makes no promises. Everything TCP does is an attempt to build reliability on top of something that has none.</p>
+    <p>IP is <b>connectionless</b> and <b>best-effort</b>: each packet is sent independently with no guarantee &mdash; it may be lost, duplicated, corrupted or arrive out of order. The transport layer offers <b>two choices</b> about what to do with that.</p>
+
+    <div class="two">
+      <div>
+        <table>
+          <tr><th></th><th>UDP</th><th>TCP</th></tr>
+          <tr><td><b>Full name</b></td><td>User Datagram Protocol</td><td>Transmission Control Protocol</td></tr>
+          <tr><td><b>Connection</b></td><td><b>Connectionless</b> &mdash; just send</td><td><b>Connection-oriented</b> &mdash; handshake first</td></tr>
+          <tr><td><b>Reliability</b></td><td>None. Lost is lost.</td><td><b>Reliable</b> &mdash; detects loss and retransmits</td></tr>
+          <tr><td><b>Ordering</b></td><td>No guarantee</td><td>Delivered <b>in order</b></td></tr>
+          <tr><td><b>Header</b></td><td><b>8 bytes</b></td><td><b>20 bytes</b> (up to 60)</td></tr>
+          <tr><td><b>Flow control</b></td><td>No</td><td>Yes (<b>rwnd</b>)</td></tr>
+          <tr><td><b>Congestion control</b></td><td>No</td><td>Yes (<b>cwnd</b>)</td></tr>
+          <tr><td><b>State at the ends</b></td><td>None kept</td><td>Buffers, sequence numbers, timers</td></tr>
+          <tr><td><b>Socket is</b></td><td><b>2-tuple</b> (dest IP, dest port)</td><td><b>4-tuple</b> (both IPs + both ports)</td></tr>
+          <tr><td><b>Used by</b></td><td><b>DNS</b>, voice/video calls, SNMP, NFS</td><td>HTTP, SMTP, FTP, POP3/IMAP</td></tr>
+        </table>
+        <div class="analogy"><b>Analogy</b><b>UDP is shouting across a room</b> &mdash; instant, no setup, and if someone didn't catch a word, too bad, the conversation has moved on. <b>TCP is a phone call</b> &mdash; you dial, both say hello, and if the line crackles you say "sorry, repeat that". The phone call is more reliable and more expensive to set up.</div>
+      </div>
+      <div>
+        <h4 class="step">Why would anyone <i>choose</i> unreliable?</h4>
+        <p class="small">Because reliability costs <b>time</b>, and for some applications a late packet is worse than a missing one. On a video call a frame arriving 2 seconds late is useless &mdash; better to skip it. That is the whole argument, and it is worth 5 marks.</p>
+        <p class="small">The four reasons in your slides:</p>
+        <ol class="small">
+          <li><b>Finer application-level control</b> &mdash; UDP sends immediately; TCP may delay data for setup, congestion control or retransmission.</li>
+          <li><b>No connection establishment</b> &mdash; no handshake, no setup delay. <b>This is why DNS uses UDP:</b> a DNS lookup is one tiny question and one tiny answer, and paying a handshake for it would double the cost.</li>
+          <li><b>No connection state</b> &mdash; no buffers or counters per client, so one server supports far more clients.</li>
+          <li><b>Small header</b> &mdash; 8 bytes instead of 20.</li>
+        </ol>
+        <div class="hook"><b>Hook</b><b>TCP = Takes Care of Packets. UDP = U Don't Pcare.</b> And note: if an app using UDP <i>does</i> need some reliability, it builds it <b>itself, at the application layer</b>.</div>
+        <div class="trap"><b>Trap</b>Both TCP and UDP do <b>multiplexing/demultiplexing</b> and both have a <b>checksum</b>. Those are the two things they share. Everything else in the table is a difference.</div>
+      </div>
+    </div>
+    <div class="unlock g2"><b>This unlocks</b>Strike Sheet Q18, Q19, and the framing of every TCP question in Unit 2.</div>
+  </div>
+</article>
+
+<article class="lesson flow">
+  <div class="lh"><span class="ln">15</span><h3>Sequence numbers, ACKs, timers and windows &mdash; how reliability is actually built</h3></div>
+  <div class="lb">
+    <p class="bigq">Four simple ideas, combined, give you reliable delivery over an unreliable network. Every single Unit 2 topic is one of these four, examined closely.</p>
+
+    <div class="two">
+      <div>
+        <h4 class="step">1. Sequence number &mdash; "this is piece number X"</h4>
+        <p class="small">Number each piece so the receiver can <b>detect a gap</b>, <b>reorder</b> what arrives out of order, and <b>discard duplicates</b>.</p>
+        <p class="small"><b>The TCP twist that confuses everyone:</b> TCP numbers <b>bytes, not segments</b>. A segment's sequence number is the <b>byte-stream number of its first data byte</b> &mdash; so Seq = 100 carrying 5 bytes holds bytes 100 to 104.</p>
+
+        <h4 class="step">2. Acknowledgement (ACK) &mdash; "I got up to here"</h4>
+        <p class="small">The receiver sends back a small message confirming receipt. In TCP the ACK number is the <b>next byte expected</b>, not the last one received:</p>
+        <div class="formula" style="border-color:var(--u2);font-size:8.4pt">ACK = last byte received + 1</div>
+        <p class="small">So after the segment above, the receiver replies <b>ACK = 105</b>. And TCP's ACKs are <b>cumulative</b>: ACK = 105 means "<i>everything</i> before byte 105 arrived", not just that one segment. That single property is why a lost ACK is often harmless &mdash; the next ACK covers it.</p>
+
+        <h4 class="step">3. Timer &mdash; "it's been too long, resend"</h4>
+        <p class="small">If no ACK returns within the <b>TimeoutInterval</b>, the sender assumes loss and <b>retransmits</b>. Setting that interval is the RTT-estimation problem from Lesson 13: too short and you resend data that was merely slow; too long and you sit idle after a real loss.</p>
+      </div>
+      <div>
+        <h4 class="step">4. Window &mdash; "how much may I have in flight at once?"</h4>
+        <p class="small">The naive protocol is <b>stop-and-wait</b>: send one packet, wait for its ACK, send the next. Correct, but catastrophically slow &mdash; you pay a full RTT per packet and the link sits idle throughout.</p>
+        <p class="small">The fix is <b>pipelining</b>: allow <b>N unacknowledged packets in flight</b> at once. N is the <b>window size</b>. This one idea is behind <b>Go-Back-N</b>, <b>Selective Repeat</b>, <b>flow control</b> and <b>congestion control</b> &mdash; all four just answer <i>"what should N be, and what happens when something in the window is lost?"</i></p>
+        <figure style="margin-top:4px">
+<svg viewBox="0 0 330 118" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7">
+<defs><marker id="w1" markerWidth="5" markerHeight="5" refX="4" refY="1.8" orient="auto"><path d="M0,0 L4,1.8 L0,3.6 z" fill="#6D28D9"/></marker></defs>
+<text x="80" y="10" text-anchor="middle" font-weight="700" font-size="7.6" fill="#BE123C">STOP-AND-WAIT</text>
+<text x="250" y="10" text-anchor="middle" font-weight="700" font-size="7.6" fill="#15803D">PIPELINED (window = 4)</text>
+<g stroke="#9AA7B8" stroke-width="1"><line x1="22" y1="16" x2="22" y2="104"/><line x1="138" y1="16" x2="138" y2="104"/><line x1="192" y1="16" x2="192" y2="104"/><line x1="308" y1="16" x2="308" y2="104"/></g>
+<g stroke="#6D28D9" stroke-width="1" marker-end="url(#w1)">
+<line x1="24" y1="20" x2="136" y2="30"/><line x1="136" y1="34" x2="26" y2="44"/>
+<line x1="24" y1="52" x2="136" y2="62"/><line x1="136" y1="66" x2="26" y2="76"/>
+<line x1="24" y1="84" x2="136" y2="94"/></g>
+<text x="26" y="18" font-size="6.2">pkt0</text><text x="100" y="42" font-size="6.2">ack0</text>
+<text x="26" y="50" font-size="6.2">pkt1</text><text x="100" y="74" font-size="6.2">ack1</text>
+<text x="26" y="82" font-size="6.2">pkt2</text>
+<text x="80" y="114" text-anchor="middle" font-size="6.8" fill="#BE123C">1 packet per RTT &mdash; link mostly idle</text>
+<g stroke="#15803D" stroke-width="1" marker-end="url(#w1)">
+<line x1="194" y1="20" x2="306" y2="26"/><line x1="194" y1="26" x2="306" y2="32"/><line x1="194" y1="32" x2="306" y2="38"/><line x1="194" y1="38" x2="306" y2="44"/>
+<line x1="306" y1="52" x2="196" y2="58"/><line x1="306" y1="58" x2="196" y2="64"/><line x1="306" y1="64" x2="196" y2="70"/><line x1="306" y1="70" x2="196" y2="76"/>
+<line x1="194" y1="84" x2="306" y2="90"/><line x1="194" y1="90" x2="306" y2="96"/></g>
+<text x="196" y="18" font-size="6.2">pkt0&ndash;3 back to back</text>
+<text x="230" y="82" font-size="6.2">ack0&ndash;3</text>
+<text x="250" y="114" text-anchor="middle" font-size="6.8" fill="#15803D">4 packets per RTT &mdash; 4&times; the throughput</text>
+</svg>
+        </figure>
+        <div class="trap"><b>Tested most</b><b>rwnd vs cwnd</b> limit the same thing &mdash; data in flight &mdash; for different reasons. <b>rwnd protects the receiver</b> from buffer overflow; <b>cwnd protects the network</b> from congestion. The sender obeys the smaller: <b>in flight = min(cwnd, rwnd)</b>.</div>
+      </div>
+    </div>
+
+    <h4 class="step">How the four ideas map onto every Unit 2 topic</h4>
+    <table>
+      <tr><th>Topic in the Strike Sheet</th><th>Which of the four it is really about</th></tr>
+      <tr><td><b>Go-Back-N</b></td><td>Window + cumulative ACK + <b>one</b> timer. On loss, resend the whole window because the receiver kept <b>no buffer</b>.</td></tr>
+      <tr><td><b>Selective Repeat</b></td><td>Window + <b>individual</b> ACKs + one timer <b>per packet</b>. The receiver buffers, so only the lost packet is resent &mdash; hence the non-overlapping windows, 2<sup>m&minus;1</sup>.</td></tr>
+      <tr><td><b>TCP reliable data transfer</b></td><td>Byte-based sequence numbers + cumulative ACKs + one timer for the <b>oldest unACKed</b> segment. Three sender events: data from above, timeout, ACK received.</td></tr>
+      <tr><td><b>Flow control (rwnd)</b></td><td>The window, sized by <b>how much space the receiver has left</b>.</td></tr>
+      <tr><td><b>Congestion control (cwnd)</b></td><td>The same window, sized by <b>what the network looks able to take</b>. Loss is the signal; the four mechanisms are the resizing rules.</td></tr>
+      <tr><td><b>Three-way handshake</b></td><td>Agreeing the <b>starting sequence numbers</b> before any of the above can work. Each side announces its ISN and has it acknowledged &mdash; three messages.</td></tr>
+    </table>
+
+    <div class="hook"><b>Hook</b><b>Number it, acknowledge it, time it, limit it.</b> Those four verbs are the whole of reliable transport &mdash; when a Unit 2 question confuses you, ask which of the four it pokes at. <b>Unlocks Strike Sheet Q11&ndash;Q17</b>, effectively the entire Unit 2 section.</div>
+  </div>
+</article>
+
+<article class="lesson flow newpage">
+  <div class="lh"><span class="ln">16</span><h3>Putting it together &mdash; one web page, from keystroke to screen</h3></div>
+  <div class="lb">
+    <p class="bigq">Everything in Units 1, 2 and 3 happens inside this one sequence. You type <code>www.someschool.edu/index.html</code> and press Enter &mdash; if you can narrate what follows, you understand the course.</p>
+    <table>
+      <tr><th style="width:4%">#</th><th style="width:36%">What happens</th><th style="width:28%">Which idea it is</th><th>Where it's examined</th></tr>
+      <tr><td><b>1<br>2</b></td><td>Your browser needs an <b>IP address</b> but only has a <b>hostname</b>, so it asks the <b>local DNS server</b>, which queries <b>root &rarr; TLD &rarr; authoritative</b> iteratively and returns the IP &mdash; over <b>UDP, port 53</b>, with no handshake, because it is one tiny question and one tiny answer.</td><td>The hostname &rarr; IP problem; DNS hierarchy; why UDP (Lessons 5, 14)</td><td><b style="color:#1D4ED8">Unit 1</b> &mdash; Q1&ndash;Q3 &middot; <b style="color:#6D28D9">Unit 2</b></td></tr>
+      <tr><td><b>3</b></td><td>The browser opens a <b>TCP connection</b> to that IP on <b>port 80</b>: <b>SYN &rarr; SYN-ACK &rarr; ACK</b>. Both sides announce their initial sequence numbers and allocate buffers. <b>Cost: 1 RTT.</b></td><td>Three-way handshake; sequence numbers (Lesson 15)</td><td><b style="color:#6D28D9">Unit 2</b> &mdash; Q15</td></tr>
+      <tr><td><b>4</b></td><td>It sends <code>GET /index.html HTTP/1.1</code> with its header lines. If a <b>cookie</b> exists for this site the browser attaches it automatically &mdash; because HTTP itself remembers nothing.</td><td>HTTP message format; statelessness</td><td><b style="color:#1D4ED8">Unit 1</b> &mdash; Q4, Q7</td></tr>
+      <tr><td><b>5</b></td><td>Going down the stack the request is wrapped: <b>message &rarr; segment</b> (ports added) <b>&rarr; datagram</b> (IPs added) <b>&rarr; frame</b> (next-hop MAC added) <b>&rarr; bits</b>.</td><td>Encapsulation; the four addresses (Lessons 4, 5)</td><td><b style="color:#1D4ED8">Unit 1</b> &mdash; Q8, Q9</td></tr>
+      <tr><td><b>6</b></td><td>At every router the <b>frame is rebuilt with a new MAC</b> while the <b>IP header is untouched</b>. The router takes the destination IP, finds its <b>network address</b>, looks it up in the <b>forwarding table</b> and picks an interface.</td><td>Masks, network addresses, forwarding (Lessons 9, 10)</td><td><b style="color:#0E7490">Unit 3</b> &mdash; Q20&ndash;Q26</td></tr>
+      <tr><td><b>7</b></td><td>At the server the stack unwraps in reverse. The transport layer reads <b>destination port 80</b> and <b>demultiplexes</b> to the web-server process &mdash; matched on the full <b>4-tuple</b>, so thousands of clients on port 80 stay separate.</td><td>Demultiplexing; sockets (Lesson 11)</td><td><b style="color:#6D28D9">Unit 2</b> &mdash; Q18</td></tr>
+      <tr><td><b>8</b></td><td>The server replies <code>HTTP/1.1 200 OK</code> plus the file. TCP cuts it into segments (data &le; <b>MSS 1460 B</b>), numbers the <b>bytes</b>, and starts a <b>timer</b> on the oldest unacknowledged one.</td><td>Segmentation, sequence numbers, timers (Lesson 15)</td><td><b style="color:#6D28D9">Unit 2</b> &mdash; Q16</td></tr>
+      <tr><td><b>9</b></td><td>It starts cautiously &mdash; <b>cwnd = 1 MSS</b>, doubling every RTT (<b>slow start</b>) &mdash; and never exceeds the <b>rwnd</b> advertised in each ACK. <b>In flight = min(cwnd, rwnd).</b></td><td>The window idea, twice over (Lesson 15)</td><td><b style="color:#6D28D9">Unit 2</b> &mdash; Q11, Q17</td></tr>
+      <tr><td><b>10</b></td><td>A segment is lost. The client re-ACKs the last in-order byte; after <b>3 duplicate ACKs</b> the server <b>fast-retransmits</b>, halves ssthresh and enters <b>fast recovery</b>. Had the <i>timer</i> expired instead, cwnd would have collapsed to 1 MSS.</td><td>Loss detection and its two different recoveries</td><td><b style="color:#6D28D9">Unit 2</b> &mdash; Q11, Q12</td></tr>
+      <tr><td><b>11<br>12</b></td><td>The browser parses the HTML, finds 10 images and requests them <b>over the same connection</b> (HTTP/1.1 is persistent) rather than paying the setup RTT ten more times. Then <b>FIN &rarr; ACK &rarr; FIN &rarr; ACK</b> closes it &mdash; four segments, because TCP is full-duplex and each direction shuts separately; the client waits in <b>TIME_WAIT</b> in case its final ACK was lost.</td><td>Counting RTTs; connection teardown (Lessons 13, 15)</td><td><b style="color:#1D4ED8">Unit 1</b> &mdash; Q6 &middot; <b style="color:#6D28D9">Unit 2</b> &mdash; Q15</td></tr>
+      <tr><td colspan="4" style="background:#FEF6DF;color:#5C3A0A;border-bottom:none"><b style="font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;color:#5C3A0A">Revision test</b> &nbsp;Cover the right-hand columns and narrate these steps out loud. Any step you stumble on points at one lesson here and one card in the Strike Sheet &mdash; step 6 hazy means re-read Part B; steps 8&ndash;10 mean re-read Lesson 15.</td></tr>
+    </table>
+  </div>
+</article>
+
+</section>
+<!-- ================= ACRONYMS ================= -->
+<section class="sheet">
+  <div class="secbar"><span class="sn">DECODER 1</span><h2>Acronyms, expanded</h2><span class="meta">every short form used in the Strike Sheet</span></div>
+  <div class="three">
+    <div>
+      <tr><th colspan="2">General &amp; Unit 1</th></tr>
+        <tr><td>ACK</td><td>Acknowledgement</td></tr>
+        <tr><td>ARPANET</td><td>Advanced Research Projects Agency Network &mdash; the Internet's ancestor</td></tr>
+        <tr><td>CNAME</td><td>Canonical Name (a DNS record type)</td></tr>
+        <tr><td>CRLF</td><td>Carriage Return + Line Feed (the blank line in HTTP)</td></tr>
+        <tr><td>DARPA</td><td>Defense Advanced Research Projects Agency &mdash; built TCP/IP</td></tr>
+        <tr><td>DNS</td><td>Domain Name System</td></tr>
+        <tr><td>DSL</td><td>Digital Subscriber Line</td></tr>
+        <tr><td>FTP</td><td>File Transfer Protocol</td></tr>
+        <tr><td>HTTP</td><td>HyperText Transfer Protocol</td></tr>
+        <tr><td>HTTPS</td><td>HTTP Secure</td></tr>
+        <tr><td>IANA</td><td>Internet Assigned Numbers Authority &mdash; coordinates the root servers</td></tr>
+        <tr><td>ICANN</td><td>Internet Corporation for Assigned Names and Numbers &mdash; allocates address blocks, accredits registrars</td></tr>
+        <tr><td>IMAP</td><td>Internet Mail Access Protocol</td></tr>
+        <tr><td>ISO</td><td>International Organization for Standardization (the <b>body</b>, est. 1947)</td></tr>
+        <tr><td>ISP</td><td>Internet Service Provider</td></tr>
+        <tr><td>LAN</td><td>Local Area Network</td></tr>
+        <tr><td>MAC</td><td>Media Access Control (the 48-bit hardware address)</td></tr>
+        <tr><td>MX</td><td>Mail eXchange (a DNS record type)</td></tr>
+        <tr><td>NIC</td><td>Network Interface Card</td></tr>
+        <tr><td>NS</td><td>Name Server (a DNS record type)</td></tr>
+        <tr><td>OSI</td><td>Open Systems Interconnection (the <b>7-layer model</b>)</td></tr>
+        <tr><td>P2P</td><td>Peer-to-Peer</td></tr>
+        <tr><td>POP3</td><td>Post Office Protocol version 3</td></tr>
+        <tr><td>RR</td><td>Resource Record (a DNS entry)</td></tr>
+        <tr><td>SMTP</td><td>Simple Mail Transfer Protocol</td></tr>
+        <tr><td>SSL</td><td>Secure Socket Layer</td></tr>
+        <tr><td>TLD</td><td>Top-Level Domain (.com, .edu, .in)</td></tr>
+        <tr><td>TTL</td><td>Time To Live (DNS caching; also the IPv4 hop limit)</td></tr>
+        <tr><td>UA</td><td>User Agent (your mail app or browser)</td></tr>
+        <tr><td>URL</td><td>Uniform Resource Locator</td></tr>
+        <tr><td>WAN</td><td>Wide Area Network</td></tr>
+    </div>
+    <div>
+      <tr><th colspan="2">Unit 2 &mdash; transport</th></tr>
+        <tr><td>AIMD</td><td>Additive Increase, Multiplicative Decrease</td></tr>
+        <tr><td>ARQ</td><td>Automatic Repeat reQuest</td></tr>
+        <tr><td>cwnd</td><td>Congestion WiNDow</td></tr>
+        <tr><td>CWR</td><td>Congestion Window Reduced (TCP flag)</td></tr>
+        <tr><td>DevRTT</td><td>Deviation of RTT</td></tr>
+        <tr><td>ECE</td><td>ECN Echo (TCP flag)</td></tr>
+        <tr><td>ECN</td><td>Explicit Congestion Notification</td></tr>
+        <tr><td>EWMA</td><td>Exponentially Weighted Moving Average (how EstimatedRTT is smoothed)</td></tr>
+        <tr><td>FIN</td><td>Finish (TCP flag)</td></tr>
+        <tr><td>FSM</td><td>Finite State Machine</td></tr>
+        <tr><td>GBN</td><td>Go-Back-N</td></tr>
+        <tr><td>ISN</td><td>Initial Sequence Number</td></tr>
+        <tr><td>MSS</td><td>Maximum Segment Size (typically 1460 B)</td></tr>
+        <tr><td>MTU</td><td>Maximum Transfer / Transmission Unit (1500 B on Ethernet)</td></tr>
+        <tr><td>PSH</td><td>Push (TCP flag)</td></tr>
+        <tr><td>RDT</td><td>Reliable Data Transfer</td></tr>
+        <tr><td>RST</td><td>Reset (TCP flag)</td></tr>
+        <tr><td>RTT</td><td>Round-Trip Time</td></tr>
+        <tr><td>rwnd</td><td>Receive WiNDow</td></tr>
+        <tr><td>SR</td><td>Selective Repeat</td></tr>
+        <tr><td>ssthresh</td><td>Slow-Start THRESHold</td></tr>
+        <tr><td>SYN</td><td>Synchronize (TCP flag)</td></tr>
+        <tr><td>TCP</td><td>Transmission Control Protocol</td></tr>
+        <tr><td>UDP</td><td>User Datagram Protocol</td></tr>
+        <tr><td>URG</td><td>Urgent (TCP flag)</td></tr>
+    </div>
+    <div>
+      <tr><th colspan="2">Unit 3 &mdash; network layer</th></tr>
+        <tr><td>BGP</td><td>Border Gateway Protocol</td></tr>
+        <tr><td>CIDR</td><td>Classless Inter-Domain Routing</td></tr>
+        <tr><td>DF / MF</td><td>Don't Fragment / More Fragments (IPv4 flags)</td></tr>
+        <tr><td>HLEN</td><td>Header LENgth</td></tr>
+        <tr><td>ICMP</td><td>Internet Control Message Protocol</td></tr>
+        <tr><td>IP</td><td>Internet Protocol</td></tr>
+        <tr><td>IPsec</td><td>IP Security</td></tr>
+        <tr><td>OSPF</td><td>Open Shortest Path First</td></tr>
+        <tr><td>QoS</td><td>Quality of Service</td></tr>
+        <tr><td>RIP</td><td>Routing Information Protocol</td></tr>
+        <tr><td>VER</td><td>VERsion field</td></tr>
+      <table class="gloss">
+        <tr><th colspan="2">Symbols you will meet</th></tr>
+        <tr><td>/n</td><td>CIDR prefix length &mdash; how many of the 32 bits are the network part</td></tr>
+        <tr><td>2<sup>n</sup></td><td>Address-space size with n bits</td></tr>
+        <tr><td>log<sub>2</sub>N</td><td>"2 to the power of what gives N" &mdash; your powers table, read backwards</td></tr>
+        <tr><td>&alpha; (alpha)</td><td>0.125 &mdash; weight of a new sample in EstimatedRTT</td></tr>
+        <tr><td>&beta; (beta)</td><td>0.25 &mdash; weight of a new deviation in DevRTT</td></tr>
+        <tr><td>&Sigma;u<sub>i</sub></td><td>"sum of all the peers' upload rates" (P2P formula)</td></tr>
+        <tr><td>d<sub>min</sub></td><td>The slowest peer's download rate</td></tr>
+        <tr><td>&le; / &ge;</td><td>At most / at least</td></tr>
+        <tr><td>m</td><td>Number of bits in a sequence number, so 2<sup>m</sup> distinct numbers</td></tr>
+      </table>
+      <div class="hook"><b>Note</b>Two pairs are worth double-checking in an answer: <b>ISO vs OSI</b> (body vs model) and <b>MTU vs MSS</b> (whole frame payload, 1500 B, vs data in one TCP segment, 1460 B).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PHRASES ================= -->
+<section class="sheet">
+  <div class="secbar"><span class="sn">DECODER 2</span><h2>Phrases that trip people up</h2><span class="meta">look these up while reading the Strike Sheet</span></div>
+  <div class="three">
+    <div>
+      <table class="gloss">
+        <tr><th colspan="2">A &ndash; D</th></tr>
+        <tr><td>Best-effort</td><td>Tries to deliver, promises nothing. IP is best-effort.</td></tr>
+        <tr><td>Broadcast address</td><td>Last address of a block (all host bits 1); reaches every host on that network.</td></tr>
+        <tr><td>Connectionless</td><td>No setup before sending; each packet independent. UDP and IP.</td></tr>
+        <tr><td>Connection-oriented</td><td>Handshake first, state kept at both ends. TCP.</td></tr>
+        <tr><td>Cumulative ACK</td><td>"ACK n" means <i>everything</i> before n arrived, not just one segment.</td></tr>
+        <tr><td>Decapsulation</td><td>Stripping headers off on the way up the stack.</td></tr>
+        <tr><td>Demultiplexing</td><td>Delivering an arriving segment to the correct socket / process.</td></tr>
+        <tr><td>Duplicate ACK</td><td>A repeat of the same ACK: "I'm still missing that piece." Three of them trigger fast retransmit.</td></tr>
+        <tr><td>Encapsulation</td><td>Adding a header on the way down the stack.</td></tr>
+      </table>
+    </div>
+    <div>
+      <table class="gloss">
+        <tr><th colspan="2">E &ndash; N</th></tr>
+        <tr><td>End-to-end</td><td>Between the two hosts at the ends: application, transport, network.</td></tr>
+        <tr><td>Full-duplex</td><td>Both directions at once. Why closing TCP takes 4 segments.</td></tr>
+        <tr><td>Hop-to-hop</td><td>Across one link only: data link and physical.</td></tr>
+        <tr><td>Host-to-host</td><td>Machine to machine (network layer), as opposed to process-to-process (transport).</td></tr>
+        <tr><td>In flight</td><td>Sent but not yet acknowledged.</td></tr>
+        <tr><td>Jitter</td><td>Variation in packet arrival time, caused by queuing delay.</td></tr>
+        <tr><td>Logical connection</td><td>An imaginary direct link between peer layers. Only the physical layer really moves bits.</td></tr>
+        <tr><td>Multiplexing</td><td>Gathering data from many processes into one outgoing stream.</td></tr>
+        <tr><td>Network address</td><td>First address of a block (all host bits 0); names the network, used in forwarding tables.</td></tr>
+      </table>
+    </div>
+    <div>
+      <table class="gloss">
+        <tr><th colspan="2">O &ndash; T</th></tr>
+        <tr><td>Octet</td><td>8 bits &mdash; one of the four numbers in an IPv4 address.</td></tr>
+        <tr><td>Pipelining</td><td>Sending several requests or packets back-to-back without waiting for each reply.</td></tr>
+        <tr><td>Prefix / suffix</td><td>Network part / host part of an IP address.</td></tr>
+        <tr><td>Process-to-process</td><td>Program to program &mdash; the transport layer's job.</td></tr>
+        <tr><td>Self-scaling</td><td>Capacity grows as users do. P2P is self-scaling; client-server is not.</td></tr>
+        <tr><td>Socket</td><td>IP address + port number; a process's doorway to the network.</td></tr>
+        <tr><td>Stateless</td><td>The server remembers nothing between requests. HTTP is stateless; cookies work around it.</td></tr>
+        <tr><td>Traffic intensity</td><td>(arrival rate &times; size) / link rate. As it nears 1, delay explodes.</td></tr>
+        <tr><td>Well-known port</td><td>A port in 0&ndash;1023 reserved for a standard service (80, 25, 53 &hellip;).</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="two" style="margin-top:10px">
+    <div class="cvr-card" style="padding:9px 11px">
+      <h4 style="font-size:9pt;margin-bottom:5px">The six pairs people mix up</h4>
+      <table>
+        <tr><th>Don't confuse</th><th>with</th></tr>
+        <tr><td><b>ISO</b> &mdash; the standards body (1947)</td><td><b>OSI</b> &mdash; the 7-layer model it published</td></tr>
+        <tr><td><b>Routing</b> &mdash; choosing the path in advance</td><td><b>Forwarding</b> &mdash; moving one received packet to its next hop</td></tr>
+        <tr><td><b>Flow control (rwnd)</b> &mdash; protects the <i>receiver</i></td><td><b>Congestion control (cwnd)</b> &mdash; protects the <i>network</i></td></tr>
+        <tr><td><b>Transmission delay</b> &mdash; getting bits out of the door (L/R)</td><td><b>Propagation delay</b> &mdash; bits travelling down the wire</td></tr>
+        <tr><td><b>MTU</b> 1500 B &mdash; largest frame payload</td><td><b>MSS</b> 1460 B &mdash; largest data in one TCP segment</td></tr>
+        <tr><td><b>internet</b> &mdash; any joined networks</td><td><b>Internet</b> &mdash; the global one</td></tr>
+      </table>
+    </div>
+    <div class="cvr-card" style="padding:9px 11px">
+      <h4 style="font-size:9pt;margin-bottom:5px">Reading an exam question's verb</h4>
+      <table>
+        <tr><th>Verb</th><th>What the marks are actually for</th></tr>
+        <tr><td><b>Illustrate / Show / Draw</b></td><td>A <b>labelled diagram</b> is ~2 of the marks. Draw it first.</td></tr>
+        <tr><td><b>Compare / Differentiate</b></td><td>A <b>table</b> with 4&ndash;6 rows, not two paragraphs.</td></tr>
+        <tr><td><b>Apply / Solve / Calculate</b></td><td>Write the <b>formula</b>, then substitute, then the answer with units. Working carries the marks.</td></tr>
+        <tr><td><b>Analyze / Justify</b></td><td>Numbered reasons, each with a consequence. Say <i>why</i>, not just <i>what</i>.</td></tr>
+        <tr><td><b>Identify / List</b></td><td>A numbered list with one line each. Say how many there are up front.</td></tr>
+        <tr><td><b>Discuss / Explain</b></td><td>Definition &rarr; structure &rarr; diagram or table &rarr; one example.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSING ================= -->
+<section class="sheet">
+  <div class="secbar"><span class="sn">CHECK</span><h2>Can you answer these without looking?</h2><span class="meta">if yes, open the Strike Sheet</span></div>
+
+  <div class="three">
+    <div>
+      <h4 class="step" style="color:var(--u1)">Part A &mdash; the model</h4>
+      <ol class="small">
+        <li>What is the difference between a host and a connecting device?</li>
+        <li>How many layers is a router involved in? A switch?</li>
+        <li>What is a protocol, in one sentence?</li>
+        <li>What does encapsulation mean?</li>
+        <li>Name the object at each of the five layers, top to bottom.</li>
+        <li>Which address changes at every hop, and which stays the same?</li>
+        <li>What question does a <b>port number</b> answer that an <b>IP address</b> cannot?</li>
+        <li>Which two OSI layers are missing from TCP/IP?</li>
+        <li>What is the difference between ISO and OSI?</li>
+        <li>Which layers are end-to-end and which are hop-to-hop?</li>
+      </ol>
+    </div>
+    <div>
+      <h4 class="step" style="color:var(--u3)">Part B &mdash; the maths</h4>
+      <ol class="small" start="11">
+        <li>What is 2<sup>6</sup>? 2<sup>8</sup>? 2<sup>10</sup>?</li>
+        <li>Convert 89 to binary. Convert 11000000 to decimal.</li>
+        <li>What is the mask for /26 in dotted decimal?</li>
+        <li>What is log<sub>2</sub> 128, and what prefix does a 128-address block get?</li>
+        <li>89 AND 192 = ? &nbsp; 89 OR 63 = ?</li>
+        <li>Why do you AND to get the first address and OR-NOT to get the last?</li>
+        <li>A /28 block: how many addresses, how many usable hosts?</li>
+        <li>Why is it N &minus; 2 and not N?</li>
+        <li>A company needs 50 addresses. What block do they get and why not 50 exactly?</li>
+        <li>Why must the largest subnet be allocated first?</li>
+      </ol>
+    </div>
+    <div>
+      <h4 class="step" style="color:var(--u2)">Part C &mdash; the conversation</h4>
+      <ol class="small" start="21">
+        <li>What is a socket made of?</li>
+        <li>Why does a client get a random high port but a server a fixed low one?</li>
+        <li>300 Kbps in Mbps?</li>
+        <li>Which of the four delays varies, and what does that cause?</li>
+        <li>What is RTT, and why is a non-persistent HTTP object 2 RTT?</li>
+        <li>Give two differences between TCP and UDP, and one thing they share.</li>
+        <li>Why does DNS use UDP?</li>
+        <li>In TCP, what does an ACK number actually mean?</li>
+        <li>What is a window, and why is stop-and-wait slow?</li>
+        <li>rwnd vs cwnd &mdash; what does each protect?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="scope" style="margin-top:12px">
+    <h4>If you got most of those &mdash; you are ready</h4>
+    <p>Open <b>DCN_CIE1_Strike_Sheet.pdf</b> and start at its page 2 (the pattern decoder). Nothing in those 34 pages will be unfamiliar vocabulary any more; what remains is the <b>specific content</b> of 27 questions that have genuinely been asked before.</p>
+    <p style="margin:0"><b>If three or more stumped you</b>, re-read just the lessons they belong to &mdash; each question above is numbered in lesson order, so question 15 is Lesson 9, question 25 is Lesson 13, and so on. Then go.</p>
+  </div>
+
+  <p style="text-align:center;margin-top:14px;font-size:8.4pt;color:var(--muted)">Ground Zero &middot; companion to the CS54 CIE-1 Strike Sheet &middot; Units 1, 2 and 3 up to IPv4 addressing</p>
+</section>
+</body>
+</html>
