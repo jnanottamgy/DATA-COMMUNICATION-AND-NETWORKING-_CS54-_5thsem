@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DCN Final 10</title>
+<style>
+@page { size: A4; margin: 13mm 12mm 14mm 12mm; }
+:root{
+  --ink:#131A24; --body:#2A3340; --muted:#6B7685; --line:#D9DFE7; --soft:#F4F6F9;
+  --u1:#1D4ED8; --u1bg:#EAF0FE; --u1line:#BFD2FB;
+  --u2:#6D28D9; --u2bg:#F2ECFE; --u2line:#D6C6FB;
+  --u3:#0E7490; --u3bg:#E4F3F7; --u3line:#B6DEE9;
+  --hot:#C2410C; --hotbg:#FFF1E6;
+  --hook:#92400E; --hookbg:#FEF6DF; --hookline:#F2DFA8;
+  --trap:#BE123C; --trapbg:#FFEDF1; --trapline:#FAC7D4;
+  --num:#0F766E; --numbg:#E6F4F1;
+}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+body{margin:0;font-family:"Inter","Liberation Sans",Arial,sans-serif;font-size:8.9pt;line-height:1.42;color:var(--body);}
+h1,h2,h3,h4{font-family:"Inter Display","Inter",sans-serif;color:var(--ink);margin:0;line-height:1.2;}
+p{margin:0 0 4px}
+ul,ol{margin:0 0 5px;padding-left:16px}
+li{margin:0 0 2px}
+b,strong{color:var(--ink);font-weight:700}
+code,.mono{font-family:"DejaVu Sans Mono",monospace;font-size:8.2pt}
+sup{font-size:.68em}
+.small{font-size:8pt}
+.mut{color:var(--muted)}
+
+/* ---------- COVER ---------- */
+.cover{height:263mm;display:flex;flex-direction:column;}
+.cvr-top{border-top:5px solid var(--ink);padding-top:9px}
+.cvr-kick{font-size:8.4pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.cvr-h{font-family:"Inter Display";font-size:40pt;font-weight:800;letter-spacing:-.025em;line-height:.98;margin:7px 0 6px;color:var(--ink)}
+.cvr-sub{font-size:12pt;color:var(--u1);font-weight:600;margin-bottom:14px}
+.cvr-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.cvr-card{border:1.2px solid var(--line);border-radius:7px;padding:10px 12px}
+.cvr-card h4{font-size:8.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.stat{display:flex;gap:12px;margin:14px 0 2px}
+.stat div{flex:1;border:1.2px solid var(--line);border-radius:7px;padding:9px 10px;text-align:center}
+.stat b{display:block;font-family:"Inter Display";font-size:20pt;font-weight:800;color:var(--u1);line-height:1}
+.stat span{font-size:7.6pt;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.scope{border:1.6px solid var(--ink);border-radius:8px;padding:12px 14px;margin-top:13px;background:var(--soft)}
+.scope h4{font-size:10pt;margin-bottom:7px}
+.scope .in{color:#166534;font-weight:700}
+.scope .out{color:var(--trap);font-weight:700}
+.toc{margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.toc h5{font-family:"Inter Display";font-size:8.6pt;margin:0 0 5px;padding-bottom:3px;border-bottom:2px solid}
+.toc ol{margin:0;padding-left:17px;font-size:7.9pt;line-height:1.34}
+.toc li{margin:0 0 2.5px}
+.toc .u1c{color:var(--u1);border-color:var(--u1)}
+.toc .u2c{color:var(--u2);border-color:var(--u2)}
+.toc .u3c{color:var(--u3);border-color:var(--u3)}
+.cvr-foot{margin-top:auto;border-top:1.2px solid var(--line);padding-top:8px;font-size:8pt;color:var(--muted)}
+
+/* ---------- SECTIONS ---------- */
+.sheet{break-before:page}
+.secbar{display:flex;align-items:baseline;gap:10px;border-bottom:3px solid var(--ink);padding-bottom:5px;margin-bottom:11px}
+.secbar h2{font-size:17pt;font-weight:800;letter-spacing:-.02em}
+.secbar .sn{font-family:"Inter Display";font-size:9pt;font-weight:800;color:#fff;background:var(--ink);padding:2.5px 8px;border-radius:4px;letter-spacing:.06em}
+.secbar .meta{margin-left:auto;font-size:8.2pt;color:var(--muted);font-weight:600}
+.u1 .secbar{border-color:var(--u1)} .u1 .secbar .sn{background:var(--u1)} .u1 .secbar h2{color:var(--u1)}
+.u2 .secbar{border-color:var(--u2)} .u2 .secbar .sn{background:var(--u2)} .u2 .secbar h2{color:var(--u2)}
+.u3 .secbar{border-color:var(--u3)} .u3 .secbar .sn{background:var(--u3)} .u3 .secbar h2{color:var(--u3)}
+
+/* ---------- QUESTION CARD ---------- */
+.q{border:1.2px solid var(--line);border-radius:8px;margin-bottom:9px;break-inside:avoid;overflow:hidden}
+.q.big{break-inside:auto}
+.qh{display:flex;gap:9px;align-items:flex-start;padding:7px 10px;background:var(--soft);border-bottom:1.2px solid var(--line)}
+.qn{font-family:"Inter Display";font-size:12.5pt;font-weight:800;color:#fff;background:var(--ink);min-width:30px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:5px;flex:none;padding:0 5px}
+.u1 .qn{background:var(--u1)} .u2 .qn{background:var(--u2)} .u3 .qn{background:var(--u3)}
+.u1 .qh{background:var(--u1bg);border-color:var(--u1line)} .u1 .q{border-color:var(--u1line)}
+.u2 .qh{background:var(--u2bg);border-color:var(--u2line)} .u2 .q{border-color:var(--u2line)}
+.u3 .qh{background:var(--u3bg);border-color:var(--u3line)} .u3 .q{border-color:var(--u3line)}
+.qt{font-size:11pt;font-weight:800;letter-spacing:-.01em;margin-bottom:3px}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:7pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1.5px 5px;border-radius:3px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+.tag.hot{background:var(--hot);border-color:var(--hot);color:#fff}
+.tag.m{background:var(--ink);border-color:var(--ink);color:#fff}
+.qbody{padding:8px 10px 9px}
+.ask{font-size:8.5pt;font-style:italic;color:var(--ink);background:#fff;border-left:3px solid var(--muted);padding:5px 9px;margin-bottom:8px;border-radius:0 4px 4px 0}
+.u1 .ask{border-color:var(--u1)} .u2 .ask{border-color:var(--u2)} .u3 .ask{border-color:var(--u3)}
+.ask .src{display:block;font-style:normal;font-size:7.4pt;color:var(--muted);font-weight:700;margin-top:3px;letter-spacing:.03em}
+h4.step{font-size:9.1pt;font-weight:800;color:var(--ink);margin:7px 0 3px;padding-bottom:2px;border-bottom:1px dotted var(--line)}
+h4.step:first-child{margin-top:0}
+
+/* ---------- BOXES ---------- */
+.hook,.trap,.numb{border-radius:6px;padding:5px 8px;margin:6px 0 0;font-size:8.3pt;break-inside:avoid}
+.hook{background:var(--hookbg);border:1px solid var(--hookline);color:#5C3A0A}
+.trap{background:var(--trapbg);border:1px solid var(--trapline);color:#8C1232}
+.numb{background:var(--numbg);border:1px solid #BCE0D9;color:#0B5048}
+.hook>b:first-child,.trap>b:first-child,.numb>b:first-child{display:inline-block;font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;margin-right:5px}
+.score{margin-top:6px;background:#fff;border:1px dashed var(--muted);border-radius:6px;padding:5px 8px;font-size:8.1pt;color:var(--body)}
+.score>b:first-child{font-size:7.2pt;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);margin-right:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* ---------- TABLES ---------- */
+table{width:100%;border-collapse:collapse;font-size:8.05pt;margin:4px 0 3px}
+th{background:var(--ink);color:#fff;text-align:left;padding:3px 5.5px;font-weight:700;font-size:7.6pt;letter-spacing:.03em}
+.u1 th{background:var(--u1)} .u2 th{background:var(--u2)} .u3 th{background:var(--u3)}
+td{border-bottom:1px solid var(--line);padding:3px 5.5px;vertical-align:top}
+tbody tr:nth-child(even) td{background:#FAFBFC}
+td.c,th.c{text-align:center}
+.tnum td{font-family:"DejaVu Sans Mono",monospace;font-size:7.8pt}
+
+/* ---------- FIGURES ---------- */
+figure{margin:7px 0 3px;break-inside:avoid;text-align:center}
+figure svg{max-width:100%;height:auto}
+figcaption{font-size:7.5pt;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:.02em}
+.codeblk{background:#1B2330;color:#E6EBF2;border-radius:6px;padding:6px 9px;font-family:"DejaVu Sans Mono",monospace;font-size:7.7pt;line-height:1.4;white-space:pre;overflow:hidden;margin:5px 0;break-inside:avoid}
+.codeblk .k{color:#7DD3FC} .codeblk .g{color:#86EFAC} .codeblk .r{color:#FCA5A5} .codeblk .y{color:#FDE68A} .codeblk .m{color:#9AA7B8}
+.lite{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.lite .k{color:var(--u1)} .lite .g{color:#15803D} .lite .r{color:var(--trap)} .lite .m{color:var(--muted)}
+.kv{display:flex;gap:6px;flex-wrap:wrap;margin:5px 0}
+.kv span{font-size:7.8pt;background:#fff;border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.kv span b{color:var(--ink)}
+.formula{text-align:center;font-family:"DejaVu Sans Mono",monospace;font-size:8.8pt;background:#fff;border:1.4px solid var(--ink);border-radius:5px;padding:5px 8px;margin:5px 0;color:var(--ink);font-weight:700}
+.u1 .formula{border-color:var(--u1)} .u2 .formula{border-color:var(--u2)} .u3 .formula{border-color:var(--u3)}
+
+.topbar{border-top:5px solid var(--ink);padding-top:7px;margin-bottom:9px}
+.topbar h1{font-family:"Inter Display";font-size:26pt;font-weight:800;letter-spacing:-.025em;line-height:1;margin:3px 0 4px}
+.topbar .k{font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.topbar .s{font-size:9.6pt;color:var(--u1);font-weight:600}
+.band{display:flex;gap:7px;margin:8px 0 10px}
+.band div{flex:1;border:1.2px solid var(--line);border-radius:6px;padding:6px 8px;font-size:7.9pt}
+.band b{display:block;font-family:"Inter Display";font-size:13pt;font-weight:800;line-height:1.05;margin-bottom:1px}
+.co{font-size:7pt;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:1.5px 5px;border-radius:3px;color:#fff}
+.co1{background:var(--u1)} .co2{background:var(--u2)} .co3{background:var(--u3)}
+.q .qbody{padding:7px 9px 8px}
+.q{margin-bottom:8px}
+.qt{font-size:10.6pt}
+.plan{border:1.6px solid var(--ink);border-radius:8px;padding:10px 12px;background:var(--soft)}
+.plan h4{font-size:10pt;margin-bottom:6px}
+</style>
+</head>
+<body>
+<section>
+  <div class="topbar">
+    <div class="k">CS54 Data Communication &amp; Networking &middot; MSRIT &middot; Internal Test 1</div>
+    <h1>THE FINAL 10</h1>
+    <div class="s">Ten questions, full answers. Study these and walk in.</div>
+  </div>
+  <div class="band">
+    <div><b>8 / 10</b>are literally the Apr 2025 CIE-1 paper, part for part</div>
+    <div><b>3 / 5 / 2</b>CO1 / CO2 / CO3 &mdash; matches how Q1 is built</div>
+    <div><b>3</b>numericals: Q5, Q9, Q10. Do these first in the hall</div>
+    <div><b>30</b>marks. Q1 compulsory, then Q2 <i>or</i> Q3</div>
+  </div>
+
+<!-- ============ Q1 ============ -->
+<article class="q big u1">
+  <div class="qh"><div class="qn">1</div><div>
+    <div class="qt">Recursive and iterative DNS resolution</div>
+    <div class="tags"><span class="co co1">CO1</span><span class="tag hot">in BOTH of the last two CIE-1s</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <p><b>Setup:</b> host <code>cse.nyu.edu</code> wants the IP of <code>gaia.cs.umass.edu</code>; its local server is <code>dns.nyu.edu</code>.</p>
+    <div class="two">
+      <div>
+        <h4 class="step">Iterative &mdash; the real case. 5 steps, 8 messages</h4>
+        <ol>
+          <li>Host &rarr; local DNS server <i>(this first hop is always <b>recursive</b>)</i></li>
+          <li>Local &rarr; <b>root</b>; root returns the IP of the <b>.edu TLD</b> server</li>
+          <li>Local &rarr; <b>TLD</b>; returns the IP of the <b>authoritative</b> server <code>dns.umass.edu</code></li>
+          <li>Local &rarr; <b>authoritative</b>; returns the IP of the host</li>
+          <li>Local DNS server &rarr; host</li>
+        </ol>
+        <p class="small">Each server says <i>"I don't know, but ask this one"</i> &mdash; so the <b>local server does all the work</b>. <b>8 messages = 4 queries + 4 replies.</b></p>
+        <h4 class="step">Recursive</h4>
+        <p class="small">host &rarr; local &rarr; root &rarr; TLD &rarr; authoritative, <b>each server querying the next on behalf of the previous</b>; the answer travels back down the same chain. Load shifts <b>upward</b> onto the higher-level servers.</p>
+      </div>
+      <div>
+        <figure style="margin-top:0">
+<svg viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.4">
+<defs><marker id="d1" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#1D4ED8"/></marker>
+<marker id="d2" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#6B7685"/></marker></defs>
+<text x="6" y="10" font-size="8" font-weight="700" fill="#1D4ED8">ITERATIVE</text>
+<rect x="6" y="88" width="62" height="22" rx="4" fill="#EAF0FE" stroke="#1D4ED8"/><text x="37" y="102" text-anchor="middle">host</text>
+<rect x="88" y="88" width="72" height="22" rx="4" fill="#fff" stroke="#131A24" stroke-width="1.2"/><text x="124" y="102" text-anchor="middle" font-weight="700">local DNS</text>
+<rect x="196" y="18" width="78" height="20" rx="3" fill="#fff" stroke="#6B7685"/><text x="235" y="32" text-anchor="middle">root</text>
+<rect x="196" y="50" width="78" height="20" rx="3" fill="#fff" stroke="#6B7685"/><text x="235" y="64" text-anchor="middle">TLD .edu</text>
+<rect x="196" y="120" width="78" height="20" rx="3" fill="#fff" stroke="#6B7685"/><text x="235" y="134" text-anchor="middle">authoritative</text>
+<line x1="68" y1="94" x2="86" y2="94" stroke="#1D4ED8" stroke-width="1.2" marker-end="url(#d1)"/><text x="72" y="91" font-size="6.6" fill="#1D4ED8">1</text>
+<line x1="86" y1="106" x2="70" y2="106" stroke="#1D4ED8" stroke-width="1.2" marker-end="url(#d1)" stroke-dasharray="3 2"/><text x="74" y="116" font-size="6.6" fill="#1D4ED8">8</text>
+<line x1="160" y1="92" x2="194" y2="32" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)"/><text x="164" y="64" font-size="6.6" fill="#6B7685">2</text>
+<line x1="194" y1="38" x2="162" y2="94" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)" stroke-dasharray="3 2"/><text x="186" y="54" font-size="6.6" fill="#6B7685">3</text>
+<line x1="162" y1="96" x2="194" y2="60" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)"/><text x="172" y="84" font-size="6.6" fill="#6B7685">4</text>
+<line x1="194" y1="68" x2="164" y2="98" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)" stroke-dasharray="3 2"/><text x="188" y="88" font-size="6.6" fill="#6B7685">5</text>
+<line x1="162" y1="106" x2="194" y2="128" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)"/><text x="166" y="124" font-size="6.6" fill="#6B7685">6</text>
+<line x1="194" y1="136" x2="164" y2="112" stroke="#6B7685" stroke-width="1" marker-end="url(#d2)" stroke-dasharray="3 2"/><text x="186" y="132" font-size="6.6" fill="#6B7685">7</text>
+<text x="282" y="100" font-size="6.6" fill="#6B7685">solid = query</text><text x="282" y="110" font-size="6.6" fill="#6B7685">dashed = reply</text>
+</svg>
+        </figure>
+        <table>
+          <tr><th>Recursive</th><th>Iterative</th></tr>
+          <tr><td>"Find me the <b>complete answer</b>" &mdash; the receiving server is responsible for getting it</td><td>"If you don't know, <b>tell me whom to ask next</b>" &mdash; returns the best info it has</td></tr>
+          <tr><td>More load on <b>root / TLD</b> servers</td><td>Work done by the <b>local DNS server</b></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="score"><b>Last mark</b>Add: <i>"DNS caching at the local server lets steps 2&ndash;4 be skipped next time, until the TTL expires."</i> In the real Internet it is <b>hybrid</b>: host&rarr;local recursive, everything after that iterative.</div>
+  </div>
+</article>
+
+<!-- ============ Q2 ============ -->
+<article class="q big u1">
+  <div class="qh"><div class="qn">2</div><div>
+    <div class="qt">TCP/IP protocol suite &mdash; the 5 layers and their logical connections</div>
+    <div class="tags"><span class="co co1">CO1</span><span class="tag hot">3 CIE-1s: 2025, 2023, 2021</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <p><b>Open with:</b> built by <b>DARPA in the 1970s for ARPANET</b>. A <b>hierarchical</b> protocol suite &mdash; each upper-level protocol is supported by lower ones. Originally <b>4 software layers on hardware</b>; today a <b>5-layer</b> model.</p>
+    <table>
+      <tr><th>Layer</th><th>Contribution to the communication</th><th>Object</th><th>Address</th></tr>
+      <tr><td><b>5 Application</b></td><td>Process-to-process request/response. The user's message is created here. HTTP, SMTP, DNS, FTP.</td><td>Message</td><td>hostname</td></tr>
+      <tr><td><b>4 Transport</b></td><td><b>End-to-end</b> logical connection; wraps the message in a <b>segment (TCP)</b> or <b>user datagram (UDP)</b>; delivers to the right process; TCP adds reliability.</td><td>Segment</td><td>Port, 16 bit</td></tr>
+      <tr><td><b>3 Network</b></td><td><b>Host-to-host</b> delivery of datagrams; adds source and destination IP; routers choose the best route. IP is connectionless, best-effort.</td><td>Datagram</td><td>IP, 32 bit</td></tr>
+      <tr><td><b>2 Data link</b></td><td>Moves frames <b>hop to hop</b> across each link; adds the MAC of the next device; detects errors on the link.</td><td>Frame</td><td>MAC, 48 bit</td></tr>
+      <tr><td><b>1 Physical</b></td><td>Carries the bits as electrical / optical / wireless signals over the medium.</td><td>Bits</td><td>&mdash;</td></tr>
+    </table>
+    <figure>
+<svg viewBox="0 0 700 118" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.2">
+<g font-size="7">
+<rect x="8" y="10" width="92" height="98" fill="#EAF0FE" stroke="#1D4ED8" stroke-width="1.2" rx="4"/>
+<rect x="13" y="14" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="54" y="26" text-anchor="middle">Application</text>
+<rect x="13" y="34" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="54" y="46" text-anchor="middle">Transport</text>
+<rect x="13" y="54" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="54" y="66" text-anchor="middle">Network</text>
+<rect x="13" y="74" width="82" height="16" fill="#fff" stroke="#BFD2FB"/><text x="54" y="85" text-anchor="middle">Data link</text>
+<rect x="13" y="92" width="82" height="14" fill="#fff" stroke="#BFD2FB"/><text x="54" y="102" text-anchor="middle">Physical</text>
+<rect x="150" y="70" width="70" height="38" fill="#F4F6F9" stroke="#6B7685" rx="4"/>
+<rect x="154" y="74" width="62" height="14" fill="#fff" stroke="#D9DFE7"/><text x="185" y="84" text-anchor="middle">Data link</text>
+<rect x="154" y="90" width="62" height="14" fill="#fff" stroke="#D9DFE7"/><text x="185" y="100" text-anchor="middle">Physical</text>
+<rect x="268" y="50" width="78" height="58" fill="#FEF6DF" stroke="#92400E" rx="4"/>
+<rect x="272" y="54" width="70" height="16" fill="#fff" stroke="#F2DFA8"/><text x="307" y="65" text-anchor="middle">Network</text>
+<rect x="272" y="72" width="70" height="14" fill="#fff" stroke="#F2DFA8"/><text x="307" y="82" text-anchor="middle">Data link</text>
+<rect x="272" y="88" width="70" height="14" fill="#fff" stroke="#F2DFA8"/><text x="307" y="98" text-anchor="middle">Physical</text>
+<rect x="394" y="70" width="70" height="38" fill="#F4F6F9" stroke="#6B7685" rx="4"/>
+<rect x="398" y="74" width="62" height="14" fill="#fff" stroke="#D9DFE7"/><text x="429" y="84" text-anchor="middle">Data link</text>
+<rect x="398" y="90" width="62" height="14" fill="#fff" stroke="#D9DFE7"/><text x="429" y="100" text-anchor="middle">Physical</text>
+<rect x="512" y="10" width="92" height="98" fill="#EAF0FE" stroke="#1D4ED8" stroke-width="1.2" rx="4"/>
+<rect x="517" y="14" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="558" y="26" text-anchor="middle">Application</text>
+<rect x="517" y="34" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="558" y="46" text-anchor="middle">Transport</text>
+<rect x="517" y="54" width="82" height="18" fill="#fff" stroke="#BFD2FB"/><text x="558" y="66" text-anchor="middle">Network</text>
+<rect x="517" y="74" width="82" height="16" fill="#fff" stroke="#BFD2FB"/><text x="558" y="85" text-anchor="middle">Data link</text>
+<rect x="517" y="92" width="82" height="14" fill="#fff" stroke="#BFD2FB"/><text x="558" y="102" text-anchor="middle">Physical</text></g>
+<text x="54" y="8" text-anchor="middle" font-size="7.4" font-weight="700">HOST A &mdash; 5</text>
+<text x="185" y="66" text-anchor="middle" font-size="7.4" font-weight="700">SWITCH &mdash; 2</text>
+<text x="307" y="46" text-anchor="middle" font-size="7.4" font-weight="700">ROUTER &mdash; 3</text>
+<text x="429" y="66" text-anchor="middle" font-size="7.4" font-weight="700">SWITCH &mdash; 2</text>
+<text x="558" y="8" text-anchor="middle" font-size="7.4" font-weight="700">HOST B &mdash; 5</text>
+<g stroke="#1D4ED8" stroke-width="1" stroke-dasharray="4 3">
+<line x1="95" y1="23" x2="517" y2="23"/><line x1="95" y1="43" x2="517" y2="43"/><line x1="95" y1="63" x2="272" y2="63"/><line x1="342" y1="63" x2="517" y2="63"/></g>
+<g stroke="#92400E" stroke-width="1" stroke-dasharray="2 2">
+<line x1="95" y1="82" x2="154" y2="82"/><line x1="216" y1="82" x2="272" y2="82"/><line x1="342" y1="82" x2="398" y2="82"/><line x1="460" y1="82" x2="517" y2="82"/>
+<line x1="95" y1="99" x2="154" y2="99"/><line x1="216" y1="99" x2="272" y2="99"/><line x1="342" y1="99" x2="398" y2="99"/><line x1="460" y1="99" x2="517" y2="99"/></g>
+<text x="616" y="26" font-size="7" fill="#1D4ED8">message</text><text x="616" y="46" font-size="7" fill="#1D4ED8">segment</text><text x="616" y="66" font-size="7" fill="#1D4ED8">datagram</text>
+<text x="616" y="85" font-size="7" fill="#92400E">frame</text><text x="616" y="102" font-size="7" fill="#92400E">bits</text>
+</svg>
+<figcaption>Logical (dashed) connections between peer layers &mdash; draw this</figcaption>
+    </figure>
+    <div class="two">
+      <div><p class="small"><b>Logical connection</b> = an imaginary direct link between the <b>same (peer) layer</b> at two devices. <b>Only the physical layer really moves the bits.</b><br>
+      <b>End-to-end:</b> application, transport, network &mdash; domain = <b>the internet</b>.<br>
+      <b>Hop-to-hop:</b> data link, physical &mdash; domain = <b>a single link</b>. A <b>hop</b> is a host or a router.</p></div>
+      <div><div class="hook"><b>Hook</b><b>Host 5, Router 3, Switch 2.</b> Objects top-down: <b>M-S-D-F-B</b> = "<b>M</b>y <b>S</b>ister <b>D</b>raws <b>F</b>unny <b>B</b>irds".</div>
+      <div class="score"><b>If it adds "network layer services"</b>logical addressing, routing, packet forwarding, internetworking &mdash; and IPv4 is <b>connectionless, best-effort</b>.</div></div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ Q3 ============ -->
+<article class="q big u1">
+  <div class="qh"><div class="qn">3</div><div>
+    <div class="qt">Cookies &mdash; keeping user state over stateless HTTP</div>
+    <div class="tags"><span class="co co1">CO1</span><span class="tag hot">came in CIE-1 Apr 2025</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <div class="two">
+      <div>
+        <p><b>Why:</b> HTTP is <b>stateless</b> &mdash; the server forgets the client the moment it replies. Cookies let a site identify a user <b>across requests and across visits</b>.</p>
+        <h4 class="step">The 4 components &mdash; write all four</h4>
+        <ol>
+          <li>A <code>Set-cookie:</code> header line in the HTTP <b>response</b></li>
+          <li>A <code>Cookie:</code> header line in subsequent <b>requests</b></li>
+          <li>A <b>cookie file</b> on the user's machine, managed by the browser</li>
+          <li>A <b>back-end database</b> at the website</li>
+        </ol>
+        <h4 class="step">Amazon login &mdash; 6 steps</h4>
+        <ol>
+          <li>User logs in: browser sends <code>POST /ap/signin</code> with username and password.</li>
+          <li>Server creates a <b>unique ID</b> (<code>session-id = ABC123</code>), stores it in its <b>database</b> against this user, replies <code>Set-cookie: session-id=ABC123</code>.</li>
+          <li>Browser saves it in its <b>cookie file</b> (<code>amazon &rarr; ABC123</code>).</li>
+          <li>On every later request the browser <b>automatically</b> adds <code>Cookie: session-id=ABC123</code>.</li>
+          <li>Server looks the ID up, recognises the user, returns <b>personalised content</b> &mdash; no password again.</li>
+          <li>A week later the cookie is still sent (until it expires), so the user is still recognised.</li>
+        </ol>
+      </div>
+      <div>
+        <figure style="margin-top:0">
+<svg viewBox="0 0 330 150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7">
+<defs><marker id="k1" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#1D4ED8"/></marker></defs>
+<text x="40" y="10" text-anchor="middle" font-weight="700" font-size="7.8">client</text>
+<text x="280" y="10" text-anchor="middle" font-weight="700" font-size="7.8">server</text>
+<line x1="40" y1="16" x2="40" y2="146" stroke="#9AA7B8"/><line x1="280" y1="16" x2="280" y2="146" stroke="#9AA7B8"/>
+<rect x="4" y="18" width="72" height="14" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/><text x="40" y="28" text-anchor="middle" font-size="6.4">cookie file: empty</text>
+<line x1="42" y1="42" x2="277" y2="42" stroke="#1D4ED8" stroke-width="1.1" marker-end="url(#k1)"/><text x="90" y="39" font-size="6.4" fill="#1D4ED8">1. POST /ap/signin</text>
+<rect x="196" y="48" width="130" height="20" rx="3" fill="#FEF6DF" stroke="#F2DFA8"/><text x="261" y="56" text-anchor="middle" font-size="6.3">2. creates ID ABC123 +</text><text x="261" y="64" text-anchor="middle" font-size="6.3">entry in back-end DB</text>
+<line x1="278" y1="76" x2="43" y2="76" stroke="#1D4ED8" stroke-width="1.1" marker-end="url(#k1)"/><text x="78" y="73" font-size="6.4" fill="#1D4ED8">3. Set-cookie: session-id=ABC123</text>
+<rect x="4" y="82" width="72" height="14" rx="3" fill="#EAF0FE" stroke="#1D4ED8"/><text x="40" y="92" text-anchor="middle" font-size="6.4">cookie file: ABC123</text>
+<line x1="42" y1="106" x2="277" y2="106" stroke="#1D4ED8" stroke-width="1.1" marker-end="url(#k1)"/><text x="72" y="103" font-size="6.4" fill="#1D4ED8">4. GET /my-orders + Cookie: ABC123</text>
+<line x1="278" y1="128" x2="43" y2="128" stroke="#1D4ED8" stroke-width="1.1" marker-end="url(#k1)"/><text x="72" y="125" font-size="6.4" fill="#1D4ED8">5. personalised order history</text>
+<text x="290" y="112" font-size="6.2" fill="#6B7685">DB lookup</text>
+<text x="4" y="146" font-size="6.3" fill="#6B7685">a week later &rarr; browser still sends the cookie</text>
+</svg>
+<figcaption>The timeline the examiner wants</figcaption>
+        </figure>
+        <div class="hook"><b>Hook</b><b>Set it, Send it, Store it, Search it</b> = Set-cookie header &middot; Cookie header &middot; browser cookie file &middot; back-end database.</div>
+        <div class="score"><b>Scoring key</b>"HTTP is stateless" opening line (1) &middot; the 4 components (1.5) &middot; the timeline diagram (1.5) &middot; the numbered example (1).</div>
+      </div>
+    </div>
+  </div>
+</article>
+</section>
+<section class="sheet u2">
+<!-- ============ Q4 ============ -->
+<article class="q big u2">
+  <div class="qh"><div class="qn">4</div><div>
+    <div class="qt">Go-Back-N with a lost frame (+ the Selective Repeat window)</div>
+    <div class="tags"><span class="co co2">CO2</span><span class="tag hot">3 CIE-1s: 2025, 2024, 2021</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <div class="two">
+      <div>
+        <h4 class="step">1. Idea</h4>
+        <p class="small">GBN is a reliable-data-transfer (<b>ARQ</b>) protocol. The sender may send up to <b>N</b> packets without waiting for ACKs. If a packet is lost, the sender <b>goes back</b> and retransmits that packet <b>and every packet after it</b>.</p>
+        <h4 class="step">2. Sender</h4>
+        <p class="small">Window of size N with <b>base</b> (oldest unACKed) and <b>nextseqnum</b>. <b>ONE timer</b>, for the oldest unACKed packet. <b>Cumulative ACKs</b> &mdash; "ACK n" means all packets up to n arrived. On timeout it resends <code>base &hellip; nextseqnum&minus;1</code>.</p>
+        <h4 class="step">3. Receiver</h4>
+        <p class="small">Accepts <b>only the expected in-order packet</b> (delivers + ACKs it). Any out-of-order or corrupted packet is <b>DISCARDED</b> and the ACK of the <b>last in-order</b> packet is re-sent. <b>The receiver has no buffer.</b></p>
+        <h4 class="step">5. Drawbacks</h4>
+        <ul class="small">
+          <li>Correctly received packets <b>after</b> the loss are thrown away and resent &rarr; <b>wasted bandwidth</b>.</li>
+          <li>Poor on <b>noisy networks</b> &mdash; one loss costs a whole window.</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="step">4. Sequence diagram, N = 4, packet 2 lost</h4>
+        <figure style="margin-top:2px">
+<svg viewBox="0 0 330 168" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="6.8">
+<defs><marker id="b1" markerWidth="5" markerHeight="5" refX="4" refY="1.8" orient="auto"><path d="M0,0 L4,1.8 L0,3.6 z" fill="#6D28D9"/></marker>
+<marker id="b2" markerWidth="5" markerHeight="5" refX="4" refY="1.8" orient="auto"><path d="M0,0 L4,1.8 L0,3.6 z" fill="#15803D"/></marker></defs>
+<text x="48" y="9" text-anchor="middle" font-weight="700" font-size="7.6">SENDER</text>
+<text x="272" y="9" text-anchor="middle" font-weight="700" font-size="7.6">RECEIVER</text>
+<line x1="48" y1="14" x2="48" y2="164" stroke="#9AA7B8"/><line x1="272" y1="14" x2="272" y2="164" stroke="#9AA7B8"/>
+<g stroke="#6D28D9" stroke-width="1" marker-end="url(#b1)"><line x1="50" y1="20" x2="270" y2="26"/><line x1="50" y1="34" x2="270" y2="40"/></g>
+<text x="52" y="18" fill="#6D28D9">pkt0</text><text x="52" y="32" fill="#6D28D9">pkt1</text>
+<g stroke="#15803D" stroke-width=".9" marker-end="url(#b2)" stroke-dasharray="3 2"><line x1="270" y1="30" x2="52" y2="36"/><line x1="270" y1="44" x2="52" y2="50"/></g>
+<text x="216" y="29" fill="#15803D">deliver, ack0</text><text x="216" y="43" fill="#15803D">deliver, ack1</text>
+<line x1="50" y1="56" x2="150" y2="60" stroke="#BE123C" stroke-width="1.2"/>
+<text x="52" y="54" fill="#BE123C" font-weight="700">pkt2</text><text x="156" y="63" fill="#BE123C" font-weight="700" font-size="7.6">&#10007; LOST</text>
+<g stroke="#6D28D9" stroke-width="1" marker-end="url(#b1)"><line x1="50" y1="72" x2="270" y2="78"/><line x1="50" y1="90" x2="270" y2="96"/><line x1="50" y1="108" x2="270" y2="114"/></g>
+<text x="52" y="70" fill="#6D28D9">pkt3</text><text x="52" y="88" fill="#6D28D9">pkt4</text><text x="52" y="106" fill="#6D28D9">pkt5</text>
+<text x="188" y="77" fill="#BE123C">DISCARD, re-ack1</text>
+<text x="188" y="95" fill="#BE123C">DISCARD, re-ack1</text>
+<text x="188" y="113" fill="#BE123C">DISCARD, re-ack1</text>
+<rect x="4" y="118" width="150" height="13" rx="3" fill="#FFEDF1" stroke="#FAC7D4"/>
+<text x="79" y="127" text-anchor="middle" font-size="6.8" font-weight="700" fill="#BE123C">TIMEOUT pkt2 &rarr; GO BACK</text>
+<g stroke="#6D28D9" stroke-width="1" marker-end="url(#b1)"><line x1="50" y1="138" x2="270" y2="142"/><line x1="50" y1="146" x2="270" y2="150"/><line x1="50" y1="152" x2="270" y2="156"/><line x1="50" y1="158" x2="270" y2="162"/></g>
+<text x="52" y="136" fill="#6D28D9">resend pkt2,3,4,5</text>
+<text x="180" y="152" fill="#15803D">deliver &rarr; ack2,3,4,5</text>
+</svg>
+        </figure>
+        <div class="hook"><b>If it asks SR window = 2<sup>m&minus;1</sup></b>The receiver <b>buffers out-of-order packets</b>, so sender and receiver windows must <b>never overlap</b>: W<sub>s</sub> + W<sub>r</sub> &le; 2<sup>m</sup> &rarr; <b>W &le; 2<sup>m&minus;1</sup></b>. With m = 2: W = 3 fails (all ACKs lost, resent pkt 0 is accepted as <i>new</i> data &mdash; an error); W = 2 works (the resent 0 is outside the receiver's window 2,3, so it is recognised as a duplicate and re-ACKed).</div>
+        <div class="score"><b>Hook</b>GBN = <b>one timer, no buffer, cumulative ACK, resend everything.</b> SR = <b>many timers, buffer, individual ACK, resend one.</b></div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ Q5 ============ -->
+<article class="q big u2">
+  <div class="qh"><div class="qn">5</div><div>
+    <div class="qt">RTT, DevRTT and the TCP timeout interval &mdash; numerical</div>
+    <div class="tags"><span class="co co2">CO2</span><span class="tag hot">in BOTH of the last two CIE-1s</span><span class="tag m">5&ndash;6 marks</span><span class="tag">free marks</span></div></div></div>
+  <div class="qbody">
+    <p class="small"><b>Write all three formulas before substituting &mdash; that line alone is worth a mark.</b></p>
+    <div class="formula">EstimatedRTT = 0.875 &middot; old + 0.125 &middot; Sample &nbsp;&nbsp;(&alpha; = 0.125)</div>
+    <div class="formula">DevRTT = 0.75 &middot; old + 0.25 &middot; |Sample &minus; <u>new</u> EstimatedRTT| &nbsp;&nbsp;(&beta; = 0.25)</div>
+    <div class="formula">TimeoutInterval = EstimatedRTT + 4 &middot; DevRTT</div>
+    <div class="two">
+      <div>
+        <h4 class="step">Apr 2025 &mdash; Sample 170 ms, old Est 150, old Dev 20</h4>
+        <div class="codeblk lite"><span class="k">Est</span> = 0.875 &#215; 150 + 0.125 &#215; 170
+    = 131.25 + 21.25        = <span class="g">152.5 ms</span>
+
+<span class="k">Dev</span> = 0.75 &#215; 20 + 0.25 &#215; |170 &#8722; 152.5|
+    = 15 + 4.375            = <span class="g">19.375 ms</span>
+
+<span class="k">TO</span>  = 152.5 + 4 &#215; 19.375
+    = 152.5 + 77.5          = <span class="g">230 ms</span></div>
+      </div>
+      <div>
+        <h4 class="step">May 2024 &mdash; two samples 106 then 120 (start 100 / 5)</h4>
+        <div class="codeblk lite"><span class="m">— Sample 1 = 106 —</span>
+Est = 0.875&#215;100 + 0.125&#215;106   = <span class="g">100.75</span>
+Dev = 0.75&#215;5 + 0.25&#215;5.25      = <span class="g">5.0625</span>
+TO  = 100.75 + 20.25           = <span class="g">121 ms</span>
+
+<span class="m">— Sample 2 = 120 (uses S1's results) —</span>
+Est = 0.875&#215;100.75 + 15       = <span class="g">103.156</span>
+Dev = 3.797 + 4.211            = <span class="g">8.008</span>
+TO  = 103.156 + 32.031         = <span class="g">135.19 ms</span></div>
+      </div>
+    </div>
+    <div class="trap"><b>3 traps that cost marks every year</b>(1) Compute <b>EstimatedRTT first</b> &mdash; DevRTT uses the <b>new</b> value, not the old one. (2) The second sample uses the <b>first sample's results</b> as its "old" values. (3) It is <b>4 &times; DevRTT</b>, never 2 or 3. Always show the substitution line and the units.</div>
+  </div>
+</article>
+
+<!-- ============ Q6 ============ -->
+<article class="q big u2">
+  <div class="qh"><div class="qn">6</div><div>
+    <div class="qt">TCP segment structure and any four flags</div>
+    <div class="tags"><span class="co co2">CO2</span><span class="tag hot">CIE-1 Apr 2025 &amp; Jun 2023</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <figure style="margin-top:0">
+<svg viewBox="0 0 700 150" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.6">
+<text x="64" y="9" font-size="6.8" fill="#6B7685">0</text><text x="290" y="9" font-size="6.8" fill="#6B7685">15</text>
+<text x="310" y="9" font-size="6.8" fill="#6B7685">16</text><text x="528" y="9" font-size="6.8" fill="#6B7685">31</text>
+<text x="556" y="9" font-size="6.8" fill="#6B7685">&#8592; 32 bits wide &#8594;</text>
+<g stroke="#6D28D9" stroke-width="1.1" fill="#F2ECFE">
+<rect x="64" y="12" width="238" height="20"/><rect x="302" y="12" width="238" height="20"/>
+<rect x="64" y="32" width="476" height="20" fill="#fff"/>
+<rect x="64" y="52" width="476" height="20" fill="#fff"/>
+<rect x="64" y="72" width="50" height="20"/><rect x="114" y="72" width="50" height="20" fill="#F4F6F9"/>
+<rect x="164" y="72" width="138" height="20" fill="#FEF6DF"/><rect x="302" y="72" width="238" height="20"/>
+<rect x="64" y="92" width="238" height="20" fill="#fff"/><rect x="302" y="92" width="238" height="20" fill="#fff"/>
+<rect x="64" y="112" width="476" height="16" fill="#F4F6F9" stroke-dasharray="3 2"/>
+<rect x="64" y="128" width="476" height="18" fill="#EAF0FE"/></g>
+<g text-anchor="middle">
+<text x="183" y="25">Source port (16)</text><text x="421" y="25">Destination port (16)</text>
+<text x="302" y="46" font-weight="700">Sequence number (32)</text>
+<text x="302" y="66" font-weight="700">Acknowledgment number (32)</text>
+<text x="89" y="81" font-size="6.4">HLEN 4</text><text x="139" y="81" font-size="6.4">unused 4</text>
+<text x="233" y="86" font-size="7.4" font-weight="700">C E U A P R S F</text>
+<text x="421" y="86">Receive window (16)</text>
+<text x="183" y="106">Internet checksum (16)</text><text x="421" y="106">Urgent data pointer (16)</text>
+<text x="302" y="124" font-size="7.2">Options (MSS, window scaling, timestamps)</text>
+<text x="302" y="141" font-weight="700">DATA &mdash; application data, limited by MSS</text></g>
+<text x="552" y="25" font-size="7" fill="#6B7685">header typically</text><text x="552" y="35" font-size="7" fill="#6B7685">20 bytes (5&ndash;15</text><text x="552" y="45" font-size="7" fill="#6B7685">words = 20&ndash;60 B)</text>
+<text x="552" y="86" font-size="7" fill="#92400E">8 flags, 1 bit each</text>
+<text x="552" y="124" font-size="7" fill="#6B7685">MSS 1460 =</text><text x="552" y="134" font-size="7" fill="#6B7685">1500 &minus; 20 &minus; 20</text>
+</svg>
+    </figure>
+    <div class="two">
+      <div>
+        <ul class="small">
+          <li><b>Source / destination port (16 each)</b> &mdash; identify the sending and receiving <b>processes</b></li>
+          <li><b>Sequence number (32)</b> &mdash; byte-stream number of the <b>first data byte</b>. TCP numbers <b>bytes, not segments</b></li>
+          <li><b>Acknowledgment number (32)</b> &mdash; <b>next byte expected</b>; valid when ACK = 1</li>
+          <li><b>Header length (4)</b> &mdash; header length in 32-bit words &middot; <b>Unused (4)</b> &mdash; reserved, 0</li>
+          <li><b>Receive window (16)</b> &mdash; bytes the receiver will accept &rarr; <b>flow control</b></li>
+          <li><b>Internet checksum (16)</b> &mdash; over <b>header and data</b> &middot; <b>Urgent pointer (16)</b> &mdash; valid only if URG = 1</li>
+          <li><b>Options</b> (variable) &middot; <b>Data</b> &mdash; the application data</li>
+        </ul>
+      </div>
+      <div>
+        <table>
+          <tr><th>Flag</th><th>Meaning</th></tr>
+          <tr><td><b>SYN</b></td><td>Establish a connection; synchronises the <b>initial sequence numbers</b> (step 1 of the handshake)</td></tr>
+          <tr><td><b>ACK</b></td><td>The ack-number field is <b>valid</b>; set in almost every segment after setup</td></tr>
+          <tr><td><b>FIN</b></td><td>Sender has finished and wants an <b>orderly close</b></td></tr>
+          <tr><td><b>RST</b></td><td>Error condition / <b>abort</b> the connection immediately</td></tr>
+        </table>
+        <div class="numb"><b>Seq/ACK example</b>Seq = 100 carrying "HELLO" holds bytes <b>100&ndash;104</b>; the server replies <b>ACK = 105</b>. <b>ACK = last byte received + 1.</b></div>
+        <div class="hook"><b>Hook</b><b>C E U A P R S F</b> = "<b>C</b>ute <b>E</b>lephants <b>U</b>sually <b>A</b>dmire <b>P</b>urple <b>R</b>oses, <b>S</b>unflowers, <b>F</b>igs".</div>
+      </div>
+    </div>
+  </div>
+</article>
+</section>
+<section class="sheet u2">
+<!-- ============ Q7 ============ -->
+<article class="q big u2">
+  <div class="qh"><div class="qn">7</div><div>
+    <div class="qt">Three-way handshake and connection termination &mdash; significance of each step</div>
+    <div class="tags"><span class="co co2">CO2</span><span class="tag hot">CIE-1 Apr 2025 &amp; Jun 2023</span><span class="tag m">5 marks</span><span class="tag">draw it</span></div></div></div>
+  <div class="qbody">
+    <div class="two">
+      <div>
+        <h4 class="step">A. Establishment &mdash; 3 segments</h4>
+        <ol>
+          <li><b>SYN.</b> Client sends SYN = 1 with a randomly chosen <code>client_isn</code>. No data.<br>
+          <i>Significance:</i> asks to open the connection and tells the server <b>where the client's byte numbering starts</b>.</li>
+          <li><b>SYN + ACK.</b> Server replies SYN = 1, its own <code>server_isn</code>, <code>ack = client_isn + 1</code>, and <b>allocates buffers</b>.<br>
+          <i>Significance:</i> agrees to connect, <b>confirms the client's number</b> and <b>announces its own</b>.</li>
+          <li><b>ACK.</b> Client sends SYN = 0, <code>seq = client_isn + 1</code>, <code>ack = server_isn + 1</code>, allocates buffers; <b>may already carry data</b>.<br>
+          <i>Significance:</i> confirms the server's number &mdash; connection is <b>ESTABLISHED</b>.</li>
+        </ol>
+        <p class="small"><b>Why three:</b> each side must <b>announce its own initial sequence number</b> and have it <b>acknowledged by the other</b>. Two steps cannot do both.</p>
+        <h4 class="step">B. Termination &mdash; 4 segments</h4>
+        <ol>
+          <li><b>FIN</b> from the client (no more data to send)</li>
+          <li><b>ACK</b> from the server &mdash; the client&rarr;server direction is now closed</li>
+          <li><b>FIN</b> from the server (it has finished too)</li>
+          <li><b>ACK</b> from the client &mdash; resources deallocated at <b>both</b> ends</li>
+        </ol>
+        <p class="small"><b>Why four:</b> TCP is <b>full-duplex</b>, so each direction is shut down <b>separately</b>. The client first waits in <b>TIME_WAIT (~30 s)</b> so a lost final ACK can be re-sent and old segments can die out.</p>
+      </div>
+      <div>
+        <figure style="margin-top:0">
+<svg viewBox="0 0 330 214" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7">
+<defs><marker id="h3" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#6D28D9"/></marker>
+<marker id="h4" markerWidth="6" markerHeight="6" refX="5" refY="2" orient="auto"><path d="M0,0 L5,2 L0,4 z" fill="#BE123C"/></marker></defs>
+<text x="46" y="10" text-anchor="middle" font-weight="700" font-size="8">client</text>
+<text x="284" y="10" text-anchor="middle" font-weight="700" font-size="8">server</text>
+<rect x="4" y="16" width="322" height="70" fill="#F2ECFE" opacity=".45"/>
+<text x="165" y="26" text-anchor="middle" font-size="7.4" font-weight="700" fill="#6D28D9">SETUP &mdash; three-way handshake</text>
+<line x1="46" y1="20" x2="46" y2="208" stroke="#9AA7B8"/><line x1="284" y1="20" x2="284" y2="208" stroke="#9AA7B8"/>
+<line x1="48" y1="34" x2="282" y2="44" stroke="#6D28D9" stroke-width="1.2" marker-end="url(#h3)"/>
+<text x="54" y="32" font-size="6.6">SYN=1, seq=client_isn</text>
+<line x1="282" y1="52" x2="50" y2="62" stroke="#6D28D9" stroke-width="1.2" marker-end="url(#h3)"/>
+<text x="104" y="50" font-size="6.6">SYN=1, ACK=1, seq=server_isn,</text><text x="150" y="58" font-size="6.6">ack=client_isn+1</text>
+<line x1="48" y1="70" x2="282" y2="80" stroke="#6D28D9" stroke-width="1.2" marker-end="url(#h3)"/>
+<text x="54" y="68" font-size="6.6">ACK=1, seq=client_isn+1, ack=server_isn+1</text>
+<text x="165" y="94" text-anchor="middle" font-size="7.2" font-weight="700" fill="#15803D">ESTABLISHED &mdash; data transfer</text>
+<rect x="4" y="100" width="322" height="88" fill="#FFEDF1" opacity=".5"/>
+<text x="165" y="111" text-anchor="middle" font-size="7.4" font-weight="700" fill="#BE123C">TEARDOWN &mdash; four segments</text>
+<line x1="48" y1="122" x2="282" y2="130" stroke="#BE123C" stroke-width="1.2" marker-end="url(#h4)"/><text x="54" y="120" font-size="6.6">FIN = 1</text>
+<line x1="282" y1="140" x2="50" y2="148" stroke="#BE123C" stroke-width="1.2" marker-end="url(#h4)"/><text x="196" y="138" font-size="6.6">ACK</text>
+<line x1="282" y1="158" x2="50" y2="166" stroke="#BE123C" stroke-width="1.2" marker-end="url(#h4)"/><text x="196" y="156" font-size="6.6">FIN = 1</text>
+<line x1="48" y1="174" x2="282" y2="182" stroke="#BE123C" stroke-width="1.2" marker-end="url(#h4)"/><text x="54" y="172" font-size="6.6">ACK</text>
+<rect x="6" y="182" width="74" height="12" rx="3" fill="#fff" stroke="#BE123C"/><text x="43" y="191" text-anchor="middle" font-size="6.2" fill="#BE123C">TIME_WAIT 30 s</text>
+<text x="165" y="206" text-anchor="middle" font-size="7.2" font-weight="700">CLOSED &mdash; 3 to open, 4 to close</text>
+</svg>
+        </figure>
+        <div class="score"><b>If it says "states" instead</b>Draw the ring of <b>6 client states</b> and label every arrow <i>event / action</i>: CLOSED &rarr;(connect, send SYN)&rarr; SYN_SENT &rarr;(rcv SYN+ACK, send ACK)&rarr; <b>ESTABLISHED</b> &rarr;(app closes, send FIN)&rarr; FIN_WAIT_1 &rarr;(rcv ACK)&rarr; FIN_WAIT_2 &rarr;(rcv FIN, send ACK)&rarr; TIME_WAIT &rarr;(30 s)&rarr; CLOSED. First three = setup, last four = termination.</div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ Q8 ============ -->
+<article class="q big u2">
+  <div class="qh"><div class="qn">8</div><div>
+    <div class="qt">Flow control and the receive window (rwnd)</div>
+    <div class="tags"><span class="co co2">CO2</span><span class="tag hot">CIE-1 May 2024 &amp; Jun 2023</span><span class="tag m">5 marks</span></div></div></div>
+  <div class="qbody">
+    <div class="two">
+      <div>
+        <p><b>Problem:</b> if the network layer delivers data faster than the application reads it, the <b>receive buffer fills and overflows</b> &mdash; data is lost.</p>
+        <p><b>Solution:</b> TCP <b>flow control</b> &mdash; a <b>speed-matching service</b> that matches the sender's rate to the <b>receiving application's reading rate</b>.</p>
+        <p class="small">The receiver keeps <code>RcvBuffer</code> plus <b>LastByteRead</b> and <b>LastByteRcvd</b>. To avoid overflow:</p>
+        <div class="formula">LastByteRcvd &minus; LastByteRead &le; RcvBuffer</div>
+        <div class="formula">rwnd = RcvBuffer &minus; [LastByteRcvd &minus; LastByteRead]</div>
+        <div class="formula">LastByteSent &minus; LastByteAcked &le; rwnd</div>
+        <p class="small">The receiver advertises <b>rwnd in the receive-window field of every ACK</b>. When <b>rwnd = 0</b> the sender stops but keeps sending <b>small probe segments</b> so it learns when space frees up.</p>
+      </div>
+      <div>
+        <figure style="margin-top:0">
+<svg viewBox="0 0 330 104" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="7.2">
+<line x1="20" y1="20" x2="310" y2="20" stroke="#131A24"/><line x1="20" y1="16" x2="20" y2="24" stroke="#131A24"/><line x1="310" y1="16" x2="310" y2="24" stroke="#131A24"/>
+<text x="165" y="14" text-anchor="middle" font-weight="700" font-size="7.6">RcvBuffer</text>
+<rect x="20" y="28" width="290" height="36" fill="#fff" stroke="#131A24" stroke-width="1.3"/>
+<rect x="20" y="28" width="160" height="36" fill="#F2ECFE" stroke="#6D28D9" stroke-width="1.1"/>
+<text x="100" y="43" text-anchor="middle" font-size="7.4" font-weight="700" fill="#6D28D9">TCP data in buffer</text>
+<text x="100" y="54" text-anchor="middle" font-size="6.6" fill="#6B7685">arrived, not yet read</text>
+<text x="245" y="43" text-anchor="middle" font-size="7.4" font-weight="700" fill="#15803D">spare room</text>
+<text x="245" y="54" text-anchor="middle" font-size="7.4" font-weight="700" fill="#15803D">= rwnd</text>
+<line x1="20" y1="64" x2="20" y2="72" stroke="#6B7685"/><line x1="180" y1="64" x2="180" y2="72" stroke="#6B7685"/>
+<text x="20" y="80" font-size="6.6" fill="#6B7685">LastByteRead</text><text x="150" y="80" font-size="6.6" fill="#6B7685">LastByteRcvd</text>
+<text x="165" y="98" text-anchor="middle" font-size="7.2" font-weight="700" fill="#6D28D9">receiver advertises rwnd in every ACK</text>
+</svg>
+<figcaption>Fig. 3.38</figcaption>
+        </figure>
+        <div class="numb"><b>Worked example</b>RcvBuffer = <b>4096 B</b>, LastByteRcvd = <b>3000</b>, LastByteRead = <b>1000</b>.<br>
+        rwnd = 4096 &minus; (3000 &minus; 1000) = <b>2096 B</b> &mdash; the sender may have at most 2096 bytes unACKed. If the application then reads up to byte 3000, rwnd rises back to <b>4096 B</b>.</div>
+        <div class="hook"><b>Hook</b><b>rwnd protects the receiver, cwnd protects the network.</b> Data actually in flight = <b>min(cwnd, rwnd)</b>.</div>
+      </div>
+    </div>
+  </div>
+</article>
+</section>
+
+<section class="sheet u3">
+<!-- ============ Q9 ============ -->
+<article class="q big u3">
+  <div class="qh"><div class="qn">9</div><div>
+    <div class="qt">CIDR &mdash; find the mask, N, first and last address</div>
+    <div class="tags"><span class="co co3">CO3</span><span class="tag hot">came in CIE-1 Apr 2025</span><span class="tag m">4&ndash;5 marks</span><span class="tag">cannot be argued with</span></div></div></div>
+  <div class="qbody">
+    <div class="numb" style="margin-top:0"><b>The 4 lines that solve every addressing question</b>
+    <b>N = 2<sup>32&minus;n</sup></b> &nbsp;·&nbsp; mask = <b>n ones then (32&minus;n) zeros</b> &nbsp;·&nbsp; <b>first = address AND mask</b> &nbsp;·&nbsp; <b>last = address OR NOT(mask)</b>. &nbsp;Also: N = NOT(mask) + 1, and n = 32 &minus; log<sub>2</sub>N.</div>
+    <div class="two">
+      <div>
+        <h4 class="step">192.168.10.55/26 &mdash; the Apr 2025 question</h4>
+        <div class="codeblk lite"><span class="k">(i) number of addresses</span>
+host bits = 32 &#8722; 26 = 6
+N = 2&#8310; = <span class="g">64 addresses in the block</span>
+usable  = 64 &#8722; 2 = <span class="g">62</span>
+          <span class="m">(network + broadcast excluded)</span>
+
+<span class="k">(ii) mask and first address</span>
+/26 = 11111111.11111111.11111111.11000000
+    = <span class="g">255.255.255.192</span>
+
+last octet 55 = 00110111
+keep top 2 bits, zero the rest:
+   00|110111  &#8594;  00|000000 = 0
+<span class="g">first (network)  = 192.168.10.0</span>
+set the 6 host bits to 1 &#8594; 00111111 = 63
+<span class="g">last (broadcast) = 192.168.10.63</span>
+<span class="g">range = 192.168.10.0 &#8211; 192.168.10.63</span></div>
+      </div>
+      <div>
+        <h4 class="step">156.180.150.89/26 &mdash; by the mask method</h4>
+        <div class="codeblk lite"><span class="k">mask</span>      = 255.255.255.192
+<span class="k">NOT(mask)</span> = 0.0.0.63
+<span class="k">N</span> = 63 + 1 = <span class="g">64</span>
+
+<span class="k">first = address AND mask</span>
+   89  = 01011001
+   192 = 11000000
+   AND = 01000000 = 64  &#8594; <span class="g">156.180.150.64</span>
+
+<span class="k">last = address OR NOT(mask)</span>
+   89  = 01011001
+   63  = 00111111
+   OR  = 01111111 = 127 &#8594; <span class="g">156.180.150.127</span></div>
+        <table class="tnum">
+          <tr><th>Prefix</th><th>/25</th><th>/26</th><th>/27</th><th>/28</th><th>/29</th><th>/30</th></tr>
+          <tr><td>Mask last octet</td><td>128</td><td><b>192</b></td><td>224</td><td><b>240</b></td><td>248</td><td>252</td></tr>
+          <tr><td>Addresses</td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td></tr>
+          <tr><td>Usable</td><td>126</td><td>62</td><td>30</td><td>14</td><td>6</td><td>2</td></tr>
+        </table>
+        <div class="trap"><b>Trap</b>"Total number of <b>valid</b> IP addresses" is ambiguous &mdash; <b>write both</b>: "64 in the block, of which 62 are usable host addresses."</div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ Q10 ============ -->
+<article class="q big u3">
+  <div class="qh"><div class="qn">10</div><div>
+    <div class="qt">Subnetting design &mdash; unequal sub-blocks from one granted block</div>
+    <div class="tags"><span class="co co3">CO3</span><span class="tag hot">most-asked Unit 3 topic &mdash; 5 past questions</span><span class="tag m">6&ndash;9 marks</span></div></div></div>
+  <div class="qbody">
+    <div class="ask">"An organization is granted a block with the beginning address <b>14.24.74.0/24</b>. It needs three subblocks: one of <b>10</b> addresses, one of <b>60</b> and one of <b>120</b>. Design the sub-blocks."</div>
+    <div class="two">
+      <div>
+        <h4 class="step">Step 1 &mdash; the given block</h4>
+        <p class="small">n = 24 &rarr; N = 2<sup>32&minus;24</sup> = 2<sup>8</sup> = <b>256 addresses</b>: <b>14.24.74.0 to 14.24.74.255</b>.</p>
+        <h4 class="step">Step 2 &mdash; the 3 rules (write them, they carry marks)</h4>
+        <ol class="small">
+          <li>Each subnet size must be a <b>power of 2</b> &mdash; round every requirement <b>up</b>.</li>
+          <li><b>n<sub>sub</sub> = 32 &minus; log<sub>2</sub> N<sub>sub</sub></b></li>
+          <li>Each <b>start address must be divisible by its own size</b> &mdash; which happens automatically if you <b>allocate the largest first</b>.</li>
+        </ol>
+        <h4 class="step">Step 4 &mdash; leftover</h4>
+        <p class="small">Used = 128 + 64 + 16 = <b>208</b>. Unused = 256 &minus; 208 = <b>48 addresses: 14.24.74.208 &ndash; 14.24.74.255</b>.</p>
+        <div class="hook"><b>Hook</b><b>"Biggest first, or the maths breaks."</b> Round-up table: <b>10&rarr;16 &middot; 50&rarr;64 &middot; 60&rarr;64 &middot; 120&rarr;128 &middot; 250&rarr;256 &middot; 500&rarr;512 &middot; 1000&rarr;1024</b>.</div>
+      </div>
+      <div>
+        <h4 class="step">Step 3 &mdash; allocation, largest first (120 &rarr; 60 &rarr; 10)</h4>
+        <table class="tnum">
+          <tr><th>Sub</th><th>Need &rarr; size</th><th>Prefix</th><th>Mask</th><th>First</th><th>Last</th></tr>
+          <tr><td>1</td><td>120 &rarr; <b>128</b></td><td><b>/25</b></td><td>255.255.255.128</td><td>14.24.74.0</td><td>14.24.74.127</td></tr>
+          <tr><td>2</td><td>60 &rarr; <b>64</b></td><td><b>/26</b></td><td>255.255.255.192</td><td>14.24.74.128</td><td>14.24.74.191</td></tr>
+          <tr><td>3</td><td>10 &rarr; <b>16</b></td><td><b>/28</b></td><td>255.255.255.240</td><td>14.24.74.192</td><td>14.24.74.207</td></tr>
+        </table>
+        <p class="small">Last address = first + N<sub>sub</sub> &minus; 1 &nbsp;(128 + 64 &minus; 1 = 191, &nbsp;192 + 16 &minus; 1 = 207).</p>
+        <figure style="margin-top:2px">
+<svg viewBox="0 0 330 56" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Arial" font-size="6.6">
+<rect x="4" y="4" width="322" height="14" fill="#fff" stroke="#131A24"/><text x="165" y="14" text-anchor="middle" font-size="6.6">14.24.74.0 &mdash; 14.24.74.255 &middot; 256 addresses</text>
+<rect x="4" y="24" width="161" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="84" y="32" text-anchor="middle" font-weight="700">S1 /25 &middot; 128</text><text x="84" y="40" text-anchor="middle">.0 &ndash; .127</text>
+<rect x="165" y="24" width="81" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="205" y="32" text-anchor="middle" font-weight="700">S2 /26 &middot; 64</text><text x="205" y="40" text-anchor="middle">.128 &ndash; .191</text>
+<rect x="246" y="24" width="20" height="20" fill="#E4F3F7" stroke="#0E7490"/><text x="256" y="33" text-anchor="middle" font-size="5.6">S3</text><text x="256" y="40" text-anchor="middle" font-size="5.2">/28</text>
+<rect x="266" y="24" width="60" height="20" fill="#F4F6F9" stroke="#6B7685" stroke-dasharray="3 2"/><text x="296" y="32" text-anchor="middle" font-weight="700" fill="#6B7685">UNUSED 48</text><text x="296" y="40" text-anchor="middle" fill="#6B7685">.208 &ndash; .255</text>
+<text x="4" y="53" font-size="6.2" fill="#6B7685">Fig. 7.10 &mdash; widths proportional: 128 : 64 : 16 : 48</text>
+</svg>
+        </figure>
+        <div class="score"><b>Equal-subnets variant</b>"Four equal subnets from <b>128.119.40.64/26</b>": /26 = 64 addresses &rarr; 64 / 4 = <b>16 each</b> &rarr; borrow <b>2 bits</b> &rarr; <b>/28</b>, mask 255.255.255.240. Starts step by 16: <b>.64, .80, .96, .112</b>; each has <b>14 usable hosts</b>.</div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ============ PLAN ============ -->
+<article class="q">
+  <div class="qh"><div class="qn">&#9654;</div><div>
+    <div class="qt">How to spend whatever time you have left</div>
+    <div class="tags"><span class="tag m">read this last</span></div></div></div>
+  <div class="qbody">
+    <div class="three">
+      <div class="plan" style="padding:8px 10px">
+        <h4>Study order</h4>
+        <p class="small" style="margin:0"><b>First 25 min &mdash;</b> Q9 and Q10 (pure method, guaranteed marks), then Q5 (the three formulas), then Q4's diagram. That is roughly <b>12 marks of near-certainty</b>.<br><br>
+        <b>Then &mdash;</b> Q2, Q6, Q7. All three are "list the parts" answers you can scaffold quickly.<br><br>
+        <b>Last &mdash;</b> Q1, Q3, Q8.</p>
+      </div>
+      <div class="plan" style="padding:8px 10px">
+        <h4>Three rules in the hall</h4>
+        <ol class="small" style="margin:0;padding-left:15px">
+          <li><b>Numericals first</b>, inside whichever of Q2 / Q3 you pick &mdash; and pick based on the <b>numerical</b>, not the theory.</li>
+          <li><b>Draw before you write.</b> "Illustrate / Show / Draw" is about <b>2 marks of picture</b>. A labelled diagram alone beats a paragraph with none.</li>
+          <li><b>Number your points</b> &mdash; "4 reasons", "3 phases", "6 steps". The marking key is written against lists.</li>
+        </ol>
+      </div>
+      <div class="plan" style="padding:8px 10px">
+        <h4>Didn't make the 10 &mdash; 10 spare minutes each</h4>
+        <p class="small" style="margin:0"><b>SMTP, A to B</b> (was Apr 2025 Q3b): user agent &rarr; A's mail server (<b>outgoing queue</b>) &rarr; SMTP client opens <b>TCP port 25</b> to B's server &rarr; handshaking &rarr; message sent &rarr; placed in <b>B's mailbox</b> &rarr; B reads it with <b>POP3 110 / IMAP 143</b>. SMTP goes <b>directly</b>, no intermediate servers.<br><br>
+        <b>Mesh vs star</b> (in three CIE-1s): links = <b>n(n&minus;1)/2 = 10</b> for n = 5, ports = n&minus;1 = 4. Mesh: no single point of failure, expensive. Star: hub fails &rarr; whole network down, cheap and easy.</p>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:10px;font-size:8.6pt;font-weight:700;color:var(--ink)">Go. You've got this.</p>
+  </div>
+</article>
+</section>
+</body>
+</html>

@@ -1,6 +1,10 @@
 # CS54 Data Communication and Networking — CIE-1
 
-Two documents, meant to be read in this order:
+Three documents. If time is short, read **`DCN_Final_10.pdf`** and nothing else.
+
+0. **`DCN_Final_10.pdf`** — 7 pages, 10 questions with full answers. Eight of the ten are the Apr 2025 CIE-1 paper part for part; the other two are the most-asked Unit 3 topic. CO split 3 / 5 / 2 to match how Q1 is built. Ends with a study order and three rules for the exam hall.
+
+The fuller pair, in this order:
 
 1. **`DCN_Ground_Zero.pdf`** — 16-page prerequisites booklet. Every concept the Strike Sheet assumes you already have, built from nothing: the layered model, encapsulation, the four addresses, the binary and bitwise maths behind all Unit 3 numericals, sockets, delays, RTT, TCP vs UDP, and how reliability is actually constructed. Ends with a 12-step walkthrough of one web request that touches all three units, plus an acronym decoder and a glossary.
 2. **`DCN_CIE1_Strike_Sheet.pdf`** — 34-page revision sheet for Internal Test 1.
